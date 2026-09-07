@@ -1,0 +1,30 @@
+{
+  "name": "studydeck-server",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "src/app.js",
+  "scripts": {
+    "dev": "node --watch src/app.js",
+    "start": "node src/app.js",
+    "test": "node --experimental-vm-modules node_modules/.bin/jest"
+  },
+  "dependencies": {
+    "@google/genai": "^2.21.0",
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mammoth": "^1.12.2",
+    "mongoose": "^9.9.4",
+    "multer": "^2.3.0",
+    "pdf-parse": "^2.4.5",
+    "pdfkit": "^0.20.2",
+    "resend": "^6.26.0",
+    "stripe": "^22.6.1"
+  },
+  "devDependencies": {
+    "jest": "^30.5.1",
+    "supertest": "^7.2.2"
+  }
+}

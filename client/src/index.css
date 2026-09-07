@@ -1,0 +1,233 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --color-ink: #f4f4f0;
+  --color-paper: #ffffff;
+  --color-highlight: #d97706;
+  --color-teal: #0d9488;
+  --color-rust: #e11d48;
+
+  --color-text-main: #0f172a;
+  --color-text-muted: #475569;
+
+  --color-glass-surface: rgba(255, 255, 255, 0.85);
+  --color-glass-hover: rgba(255, 255, 255, 0.95);
+  --color-glass-border: rgba(0, 0, 0, 0.08);
+}
+
+.dark {
+  --color-ink: #080b11;
+  --color-paper: #111317;
+  --color-highlight: #fbbf24;
+  --color-teal: #14b8a6;
+  --color-rust: #f43f5e;
+
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+
+  --color-glass-surface: rgba(255, 255, 255, 0.04);
+  --color-glass-hover: rgba(255, 255, 255, 0.08);
+  --color-glass-border: rgba(255, 255, 255, 0.08);
+}
+
+@theme {
+  --font-display: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  --color-ink: var(--color-ink);
+  --color-paper: var(--color-paper);
+  --color-highlight: var(--color-highlight);
+  --color-teal: var(--color-teal);
+  --color-rust: var(--color-rust);
+
+  --color-obsidian: #080b11;
+  --color-obsidian-deep: #05070c;
+  --color-obsidian-soft: #0e131f;
+
+  --color-glass-surface: var(--color-glass-surface);
+  --color-glass-hover: var(--color-glass-hover);
+  --color-glass-border: var(--color-glass-border);
+  --color-glass-border-amber: rgba(251, 191, 36, 0.35);
+
+  --color-gold-500: #f59e0b;
+  --color-gold-400: #fbbf24;
+  --color-gold-600: #d97706;
+  --color-indigo-glow: #6366f1;
+  --color-cyan-glow: #06b6d4;
+  --color-emerald-glow: #10b981;
+  --color-rose-glow: #f43f5e;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-glass-border);
+  }
+
+  body {
+    font-family: var(--font-display);
+    background-color: var(--color-ink);
+    color: var(--color-text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+    letter-spacing: -0.01em;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+}
+
+/* Glassmorphic Component Utilities */
+.glass-panel {
+  background: rgba(11, 15, 23, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.075);
+  border-color: rgba(251, 191, 36, 0.35);
+  box-shadow: 0 20px 45px -12px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transform: translateY(-3px);
+}
+
+.glass-card-interactive {
+  background: rgba(255, 255, 255, 0.035);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card-interactive:hover {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow: 0 15px 35px -10px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.glass-input {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  color: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(245, 158, 11, 0.55);
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.btn-gold {
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  color: #080b11;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 4px 20px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-gold:hover {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  box-shadow: 0 6px 28px rgba(245, 158, 11, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.btn-gold:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(245, 158, 11, 0.3);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.05);
+  color: #f1f5f9;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+/* Custom Smooth Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Ambient Glowing Orbs Animations */
+@keyframes float-slow {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(45px, -35px) scale(1.1);
+  }
+  66% {
+    transform: translate(-25px, 20px) scale(0.95);
+  }
+}
+
+@keyframes float-reverse {
+  0%, 100% {
+    transform: translate(0px, 0px) scale(1);
+  }
+  33% {
+    transform: translate(-40px, 30px) scale(0.9);
+  }
+  66% {
+    transform: translate(30px, -20px) scale(1.08);
+  }
+}
+
+.animate-orb-amber {
+  animation: float-slow 22s ease-in-out infinite;
+}
+
+.animate-orb-indigo {
+  animation: float-reverse 26s ease-in-out infinite;
+}
+
+.animate-orb-cyan {
+  animation: float-slow 19s ease-in-out infinite 4s;
+}
+
+/* 3D Flip Perspective */
+.perspective-1000 {
+  perspective: 1000px;
+}
