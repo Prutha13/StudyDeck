@@ -1,14 +1,11 @@
 import { GoogleGenAI } from '@google/genai';
 import { cleanPdfText } from './extract.service.js';
 
-// Ordered by preference: try the "latest" alias first (Google auto-points this at
-// their current best/most stable Flash model, so this list self-updates as Google
-// ships new models), then fall back to explicit GA model IDs in case the alias is
-// ever unavailable in a given account/region. Do NOT pin only to old hardcoded model
-// IDs — Google decommissions Gemini models on a schedule, and a hardcoded list
-// silently goes stale, causing every real API call to fail and forcing a permanent
-// fallback to the (much lower quality) local NLP extractor below.
-const PREFERRED_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-2.0-flash', 'gemini-3.6-flash', 'gemini-3.5-flash'];
+// Google deprecates Gemini models on a rolling schedule.
+// Official deprecations & active models list: https://ai.google.dev/gemini-api/docs/deprecations
+// Primary: 'gemini-3.1-flash-lite' (fastest & lowest cost for free-tier / portfolio use)
+// Fallbacks: 'gemini-3-flash-preview', 'gemini-flash-latest'
+const PREFERRED_MODELS = ['gemini-3.1-flash-lite', 'gemini-3-flash-preview', 'gemini-3.6-flash', 'gemini-flash-latest'];
 const GEMINI_TIMEOUT_MS = 45000; // 45s per model call to allow rich structured synthesis
 
 function withTimeout(promise, ms, label) {
