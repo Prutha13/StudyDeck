@@ -6,12 +6,10 @@ services:
     buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /api/health
-    plan: starter
+    plan: free
     envVars:
       - key: NODE_ENV
         value: production
-      - key: PORT
-        value: 5000
       - key: MONGO_URI
         sync: false
       - key: JWT_SECRET
@@ -30,14 +28,5 @@ services:
         sync: false
       - key: STRIPE_YEARLY_PRICE_ID
         sync: false
-      - key: SMTP_HOST
+      - key: RESEND_API_KEY
         sync: false
-      - key: SMTP_PORT
-        sync: false
-      - key: SMTP_USER
-        sync: false
-      - key: SMTP_PASS
-        sync: false
-      - key: SMTP_FROM
-        sync: false
-

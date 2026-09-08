@@ -14,7 +14,7 @@ const app = express();
 const rawOrigins = process.env.CLIENT_ORIGIN || '';
 const configuredOrigins = rawOrigins
   .split(',')
-  .map((o) => o.trim())
+  .map((o) => o.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
 app.use(cors({
@@ -26,7 +26,8 @@ app.use(cors({
       return callback(null, true);
     }
     // In production with CLIENT_ORIGIN configured, verify against allowlist
-    if (configuredOrigins.includes(origin)) {
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+    if (configuredOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
     return callback(new Error(`CORS blocked request from origin: ${origin}`));

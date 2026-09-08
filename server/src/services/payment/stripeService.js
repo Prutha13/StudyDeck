@@ -55,7 +55,10 @@ export async function getOrCreateCustomer(user) {
  */
 export async function createCheckoutSession({ user, planInterval = 'monthly', clientOrigin }) {
   const stripe = getStripe();
-  const origin = clientOrigin || process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+  const origin = (clientOrigin || process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+    .split(',')[0]
+    .trim()
+    .replace(/\/+$/, '');
 
   if (!['monthly', 'yearly'].includes(planInterval)) {
     throw new Error('Invalid plan interval. Must be "monthly" or "yearly".');
@@ -128,7 +131,10 @@ export async function createCheckoutSession({ user, planInterval = 'monthly', cl
  */
 export async function createCustomerPortalSession({ user, clientOrigin }) {
   const stripe = getStripe();
-  const origin = clientOrigin || process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+  const origin = (clientOrigin || process.env.CLIENT_ORIGIN || 'http://localhost:5173')
+    .split(',')[0]
+    .trim()
+    .replace(/\/+$/, '');
 
   if (!user.subscription?.stripeCustomerId) {
     throw new Error('No Stripe billing profile found for this account. Please upgrade to a paid plan first.');
