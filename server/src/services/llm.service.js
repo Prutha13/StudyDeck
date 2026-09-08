@@ -115,6 +115,13 @@ export function isDefinitionQuestion(front) {
   return /\b(definition of|what is|what are|define)\b/i.test(front.trim());
 }
 
+export function isValidFlashcardAnswer(answer) {
+  if (!answer || typeof answer !== 'string') return false;
+  const trimmed = answer.trim();
+  if (trimmed.length < 20) return false;
+  return /[.!?]$/.test(trimmed);
+}
+
 export function isMetaStatement(text) {
   if (!text || typeof text !== 'string') return true;
   const t = text.trim();
@@ -196,10 +203,29 @@ IF docType = "theory":
 IF docType = "other":
 - Ask questions testing comprehension of key facts, relationships, and decisions.
 
-STRICT RULES:
+STRICT RULES FOR ALL GENERATIONS:
 1. Never test the wording or punctuation of the text itself.
 2. Ignore titles, course codes, syllabus tables, section numbering, and page headers/footers.
 3. The answer to every question must directly and concisely answer the question asked.
+
+FLASHCARD GENERATION RULES:
+1. For each flashcard, write the answer ("back") as a complete, self-contained explanation in your own words — 2 to 4 full sentences. Do not copy sentences verbatim from the source text.
+2. Never end an answer mid-sentence. Every answer must end with proper punctuation (a period, exclamation mark, or question mark).
+3. Do not produce partial or truncated answers under any circumstances. If you are unsure of the full explanation, write a shorter but COMPLETE answer rather than a longer incomplete one.
+4. Output strict JSON matching the schema below.
+
+WORKED EXAMPLE FOR FLASHCARDS:
+BAD Answer (Truncated / Verbatim fragment - DO NOT DO THIS):
+{
+  "front": "What is unit testing?",
+  "back": "Performed to verify the interface and the"
+}
+
+GOOD Answer (Complete, explanatory, in plain language, 2-4 sentences - DO THIS):
+{
+  "front": "What is unit testing?",
+  "back": "Unit testing is a software engineering practice where individual units or components of code are tested in isolation. It verifies that each function or module behaves correctly according to its specifications. By catching defects early in development, unit tests reduce integration issues later in the project."
+}
 
 Extract:
 1. "summary": A concise executive summary of what the document actually covers.
@@ -209,7 +235,7 @@ Extract:
     ? `Generate exactly ${quizCount} multiple-choice quiz questions testing concepts in the document.`
     : `Return an empty array [] for "quiz".`
 }
-4. "flashcards": 4 to 8 flashcards in question-and-answer format for active recall practice ("front" is a short question, "back" is a concise, self-contained answer).
+4. "flashcards": 4 to 8 flashcards in question-and-answer format for active recall practice ("front" is a short question, "back" is a 2 to 4 sentence complete explanation).
 
 Return ONLY valid JSON matching exactly this schema with no markdown formatting, no code fences, and no surrounding text:
 {
@@ -228,7 +254,7 @@ Return ONLY valid JSON matching exactly this schema with no markdown formatting,
   "flashcards": [
     {
       "front": "A short question about a key concept, syntax element, or process",
-      "back": "A clear, direct answer/explanation a student could use to self-check recall"
+      "back": "A complete, self-contained 2-4 sentence explanation in plain language ending with proper punctuation"
     }
   ]
 }
@@ -249,7 +275,8 @@ ${preparedText}
                 contents: prompt,
                 config: {
                   responseMimeType: 'application/json',
-                  temperature: 0.3
+                  temperature: 0.3,
+                  maxOutputTokens: 4096
                 }
               }),
               GEMINI_TIMEOUT_MS,
@@ -260,7 +287,25 @@ ${preparedText}
         );
 
         const responseText = result.text || '';
+        const candidate = result.candidates?.[0];
+        const finishReason = candidate?.finishReason;
+        console.log(`[LLMService] Gemini model ${modelName} finishReason: ${finishReason || 'STOP'}`);
+        if (finishReason === 'MAX_TOKENS') {
+          throw new Error(`Gemini response truncated due to MAX_TOKENS limit (finishReason: ${finishReason})`);
+        }
+
         const parsed = parseStructuredJson(responseText);
+
+        // Validate Flashcards: length >= 20 and ends with punctuation (. ! ?)
+        if (Array.isArray(parsed.flashcards)) {
+          for (const card of parsed.flashcards) {
+            const back = String(card?.back || card?.answer || '').trim();
+            if (!isValidFlashcardAnswer(back)) {
+              console.warn(`[LLMService] Flashcard answer validation failed (length < 20 or missing ending punctuation): "${back}"`);
+              throw new Error(`Flashcard answer validation failed: answer is incomplete or missing ending punctuation ("${back}")`);
+            }
+          }
+        }
 
         // Post-generation sanity filters
         const isBannedQuestion = (q) => {
@@ -433,11 +478,28 @@ function generateLocalInsights(transcript, quizCount = 5) {
   let flashcards = [];
   let quiz = [];
 
+  const formatLocalAnswer = (text) => {
+    let t = String(text || '').trim();
+    if (t.length > 250) {
+      const lastPunct = Math.max(t.lastIndexOf('.', 250), t.lastIndexOf('!', 250), t.lastIndexOf('?', 250));
+      if (lastPunct > 20) {
+        t = t.slice(0, lastPunct + 1);
+      } else {
+        const lastSpace = t.lastIndexOf(' ', 245);
+        t = (lastSpace > 20 ? t.slice(0, lastSpace) : t.slice(0, 245)) + '.';
+      }
+    }
+    if (!/[.!?]$/.test(t)) {
+      t += '.';
+    }
+    return t;
+  };
+
   if (uniqueTermDefs.length >= 2) {
     const picked = uniqueTermDefs.slice(0, 8);
     flashcards = picked.map(({ term, def }) => ({
       front: `What is the primary role and definition of ${term}?`,
-      back: def.length > 180 ? def.slice(0, 177) + '…' : def
+      back: formatLocalAnswer(def)
     }));
 
     if (quizCount > 0) {
@@ -467,7 +529,7 @@ function generateLocalInsights(transcript, quizCount = 5) {
       const topic = words[0] || 'Key Concept';
       return {
         front: `What key concept is described regarding ${topic}?`,
-        back: s.length > 180 ? s.slice(0, 177) + '…' : s
+        back: formatLocalAnswer(s)
       };
     });
 
