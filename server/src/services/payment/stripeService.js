@@ -155,16 +155,19 @@ export async function createCustomerPortalSession({ user, clientOrigin }) {
  */
 export async function syncSubscriptionState(stripeSubscription, userIdHint = null) {
   let userId = stripeSubscription.metadata?.userId || userIdHint;
+  const customerId = typeof stripeSubscription.customer === 'string'
+    ? stripeSubscription.customer
+    : stripeSubscription.customer?.id || null;
 
   let user;
   if (userId) {
     user = await User.findById(userId);
-  } else if (stripeSubscription.customer) {
-    user = await User.findOne({ 'subscription.stripeCustomerId': stripeSubscription.customer });
+  } else if (customerId) {
+    user = await User.findOne({ 'subscription.stripeCustomerId': customerId });
   }
 
   if (!user) {
-    console.warn(`[STRIPE SYNC] No user found for subscription ${stripeSubscription.id} (customer: ${stripeSubscription.customer})`);
+    console.warn(`[STRIPE SYNC] No user found for subscription ${stripeSubscription.id} (customer: ${customerId})`);
     return null;
   }
 
@@ -189,7 +192,7 @@ export async function syncSubscriptionState(stripeSubscription, userIdHint = nul
   user.subscription = {
     plan: isGoodStanding ? 'premium' : 'free',
     status: status,
-    stripeCustomerId: stripeSubscription.customer,
+    stripeCustomerId: customerId || user.subscription?.stripeCustomerId || null,
     stripeSubscriptionId: stripeSubscription.id,
     stripePriceId: stripePriceId,
     billingInterval: planInterval,

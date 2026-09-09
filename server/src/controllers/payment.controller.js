@@ -3,7 +3,9 @@ import { PLANS, getPlanLimits } from '../config/plans.js';
 import {
   createCheckoutSession,
   createCustomerPortalSession,
-  handleWebhookEvent
+  handleWebhookEvent,
+  getStripe,
+  syncSubscriptionState
 } from '../services/payment/stripeService.js';
 
 export async function getPlans(req, res) {
@@ -33,7 +35,7 @@ export async function getSubscription(req, res) {
       currentPeriodStart: user.subscription?.currentPeriodStart || null,
       currentPeriodEnd: user.subscription?.currentPeriodEnd || null,
       cancelAtPeriodEnd: Boolean(user.subscription?.cancelAtPeriodEnd),
-      hasStripeCustomer: Boolean(user.subscription?.stripeCustomerId),
+      hasStripeCustomerId: Boolean(user.subscription?.stripeCustomerId),
       usage: user.usage,
       limits: getPlanLimits(plan)
     });
@@ -60,6 +62,47 @@ export async function createCheckout(req, res) {
   } catch (err) {
     console.error('Create checkout failed:', err.message);
     res.status(400).json({ error: err.message || 'Failed to create checkout session' });
+  }
+}
+
+export async function verifySession(req, res) {
+  try {
+    const { sessionId } = req.query;
+    if (!sessionId) {
+      return res.status(400).json({ error: 'sessionId query parameter is required' });
+    }
+
+    const stripe = getStripe();
+    const session = await stripe.checkout.sessions.retrieve(sessionId, {
+      expand: ['subscription']
+    });
+
+    const sessionUserId = session.client_reference_id || session.metadata?.userId;
+    if (sessionUserId && sessionUserId !== req.user.id) {
+      return res.status(403).json({ error: 'Forbidden: Checkout session does not belong to the authenticated user' });
+    }
+
+    let subscriptionActive = false;
+
+    if (session.subscription) {
+      const subscriptionObj = typeof session.subscription === 'object' && session.subscription !== null
+        ? session.subscription
+        : await stripe.subscriptions.retrieve(session.subscription);
+
+      await syncSubscriptionState(subscriptionObj, req.user.id);
+
+      const status = subscriptionObj.status;
+      subscriptionActive = ['active', 'trialing'].includes(status);
+    }
+
+    res.json({
+      verified: true,
+      status: session.payment_status,
+      subscriptionActive
+    });
+  } catch (err) {
+    console.error('Verify session failed:', err.message);
+    res.status(400).json({ error: err.message || 'Failed to verify checkout session' });
   }
 }
 
