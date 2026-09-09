@@ -1,6 +1,5 @@
-import { Resend } from 'resend';
-
-const resend = new Resend(process.env.RESEND_API_KEY || 're_placeholder');
+const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
+const SENDER = { name: 'StudyDeck', email: 'pruthathakor13@gmail.com' };
 
 let latestTestOtp = null;
 
@@ -12,15 +11,44 @@ export function _getLatestTestOtp() {
 }
 
 /**
- * Send welcome / transactional notification email via Resend API.
+ * Internal helper: send an email via Brevo's transactional email API.
+ */
+async function sendViaBrevo({ to, subject, text, html }) {
+  const response = await fetch(BREVO_API_URL, {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': process.env.BREVO_API_KEY || '',
+      'content-type': 'application/json'
+    },
+    body: JSON.stringify({
+      sender: SENDER,
+      to: [{ email: to }],
+      subject,
+      textContent: text,
+      htmlContent: html
+    })
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok) {
+    const message = data?.message || `Brevo API returned status ${response.status}`;
+    throw new Error(message);
+  }
+
+  return data;
+}
+
+/**
+ * Send welcome / transactional notification email via Brevo API.
  */
 export async function sendWelcomeEmail({ to }) {
   if (!to) return;
   const normalizedEmail = to.trim().toLowerCase();
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'StudyDeck <onboarding@resend.dev>',
+    const data = await sendViaBrevo({
       to: normalizedEmail,
       subject: 'Welcome to StudyDeck!',
       text: 'Welcome to StudyDeck! Start transforming your lecture notes into instant summaries and study decks.',
@@ -34,17 +62,15 @@ export async function sendWelcomeEmail({ to }) {
       `
     });
 
-    if (error) {
-      console.warn(`[EmailService] Resend email warning for ${normalizedEmail}:`, error.message);
-    }
-    return { success: !error, data };
+    return { success: true, data };
   } catch (err) {
-    console.warn(`[EmailService] Failed to send welcome email to ${normalizedEmail}:`, err.message);
+    console.warn(`[EmailService] Failed to send welcome email to ${normalizedEmail}:`, err.message || err);
+    return { success: false, error: err.message || String(err) };
   }
 }
 
 /**
- * Send OTP verification code email via Resend API.
+ * Send OTP verification code email via Brevo API.
  */
 export async function sendOtpEmail({ to, otp }) {
   if (!to || !otp) return;
@@ -52,8 +78,7 @@ export async function sendOtpEmail({ to, otp }) {
   latestTestOtp = otp;
 
   try {
-    const { data, error } = await resend.emails.send({
-      from: 'StudyDeck <no-reply@studydeck.thepromiesjewels.com>',
+    const data = await sendViaBrevo({
       to: normalizedEmail,
       subject: `Your StudyDeck Verification Code: ${otp}`,
       text: `Your verification code is ${otp}. It expires in 10 minutes.`,
@@ -71,12 +96,9 @@ export async function sendOtpEmail({ to, otp }) {
       `
     });
 
-    if (error) {
-      console.warn(`[EmailService] Resend OTP email warning for ${normalizedEmail}:`, error.message);
-    }
-    return { success: !error, data };
+    return { success: true, data };
   } catch (err) {
-    console.warn(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message);
+    console.error(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message || err);
+    return { success: false, error: err.message || String(err) };
   }
 }
-
