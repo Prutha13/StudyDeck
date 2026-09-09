@@ -53,7 +53,7 @@ export async function sendOtpEmail({ to, otp }) {
 
   try {
     const { data, error } = await resend.emails.send({
-      from: 'StudyDeck <no-reply@studydeck.we3vision.com>',
+      from: 'StudyDeck <no-reply@studydeck.thepromiesjewels.com>',
       to: normalizedEmail,
       subject: `Your StudyDeck Verification Code: ${otp}`,
       text: `Your verification code is ${otp}. It expires in 10 minutes.`,
@@ -72,11 +72,11 @@ export async function sendOtpEmail({ to, otp }) {
     });
 
     if (error) {
-      console.error(`[EmailService] Resend OTP email error for ${normalizedEmail}:`, error.message || error);
+      console.warn(`[EmailService] Resend OTP email warning for ${normalizedEmail}:`, error.message);
     }
     return { success: !error, data };
   } catch (err) {
-    console.error(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message || err);
+    console.warn(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message);
   }
 }
 
