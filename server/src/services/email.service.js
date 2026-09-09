@@ -72,11 +72,11 @@ export async function sendOtpEmail({ to, otp }) {
     });
 
     if (error) {
-      console.warn(`[EmailService] Resend OTP email warning for ${normalizedEmail}:`, error.message);
+      console.error(`[EmailService] Resend OTP email error for ${normalizedEmail}:`, error.message || error);
     }
     return { success: !error, data };
   } catch (err) {
-    console.warn(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message);
+    console.error(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message || err);
   }
 }
 

@@ -44,8 +44,11 @@ export async function register(req, res) {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-    const exists = await User.findOne({ email: normalizedEmail });
-    if (exists) return res.status(409).json({ error: 'Email already registered' });
+    let user = await User.findOne({ email: normalizedEmail });
+
+    if (user && user.isVerified) {
+      return res.status(409).json({ error: 'Email already registered' });
+    }
 
     const passwordHash = await bcrypt.hash(password, 10);
     const otp = generateOtp();
@@ -53,16 +56,31 @@ export async function register(req, res) {
     const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
     const otpLastSentAt = new Date();
 
-    const user = await User.create({
-      email: normalizedEmail,
-      passwordHash,
-      isVerified: false,
-      otpHash,
-      otpExpiresAt,
-      otpLastSentAt
-    });
+    if (user) {
+      // Re-registering an unverified or legacy account: refresh credentials & OTP
+      user.passwordHash = passwordHash;
+      user.isVerified = false;
+      user.otpHash = otpHash;
+      user.otpExpiresAt = otpExpiresAt;
+      user.otpLastSentAt = otpLastSentAt;
+      await user.save();
+    } else {
+      // Fresh user registration
+      user = await User.create({
+        email: normalizedEmail,
+        passwordHash,
+        isVerified: false,
+        otpHash,
+        otpExpiresAt,
+        otpLastSentAt
+      });
+    }
 
-    await sendOtpEmail({ to: normalizedEmail, otp });
+    try {
+      await sendOtpEmail({ to: normalizedEmail, otp });
+    } catch (emailErr) {
+      console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
+    }
 
     res.status(201).json({
       message: 'Registration successful. Verification code sent to your email.',
@@ -84,7 +102,7 @@ export async function sendOtp(req, res) {
     if (!user) return res.status(404).json({ error: 'User not found' });
     if (user.isVerified) return res.status(400).json({ error: 'User is already verified' });
 
-    // Enforce 60s resend cooldown
+    // Enforce 60s resend cooldown with null-guard
     const COOLDOWN_MS = 60 * 1000;
     if (user.otpLastSentAt) {
       const elapsed = Date.now() - new Date(user.otpLastSentAt).getTime();
@@ -103,7 +121,11 @@ export async function sendOtp(req, res) {
     user.otpLastSentAt = new Date();
     await user.save();
 
-    await sendOtpEmail({ to: normalizedEmail, otp });
+    try {
+      await sendOtpEmail({ to: normalizedEmail, otp });
+    } catch (emailErr) {
+      console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
+    }
 
     res.json({
       message: 'Verification code sent to your email',
@@ -122,12 +144,10 @@ export async function verifyOtp(req, res) {
     const normalizedEmail = email.trim().toLowerCase();
     const user = await User.findOne({ email: normalizedEmail });
     if (!user) return res.status(404).json({ error: 'User not found' });
-    if (!user.otpHash || !user.otpExpiresAt) {
-      return res.status(400).json({ error: 'No verification code requested or code has expired' });
-    }
 
-    if (new Date() > new Date(user.otpExpiresAt)) {
-      return res.status(400).json({ error: 'Verification code has expired' });
+    // Null-guard on otpHash and otpExpiresAt to prevent instant expiration errors
+    if (!user.otpHash || !user.otpExpiresAt || new Date() > new Date(user.otpExpiresAt)) {
+      return res.status(400).json({ error: 'No pending verification. Please request a new code.' });
     }
 
     const isMatch = await bcrypt.compare(otp, user.otpHash);
