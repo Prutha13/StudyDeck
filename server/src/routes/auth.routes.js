@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getMe, sendOtp, verifyOtp, updateProfile } from '../controllers/auth.controller.js';
+import { register, login, sendOtp, verifyOtp, getMe, updateProfile } from '../controllers/auth.controller.js';
 import { authMiddleware } from '../middleware/auth.middleware.js';
 
 const router = Router();
@@ -11,4 +11,3 @@ router.patch('/profile', authMiddleware, updateProfile);
 router.get('/me', authMiddleware, getMe);
 
 export default router;
-

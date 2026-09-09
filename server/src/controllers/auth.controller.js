@@ -9,6 +9,10 @@ function signToken(userId) {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
 }
 
+function generateOtp() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+
 function sanitizeUser(user) {
   return {
     id: user._id,
@@ -44,11 +48,10 @@ export async function register(req, res) {
     if (exists) return res.status(409).json({ error: 'Email already registered' });
 
     const passwordHash = await bcrypt.hash(password, 10);
-
-    // Generate 6-digit OTP and hash it
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otp = generateOtp();
     const otpHash = await bcrypt.hash(otp, 10);
-    const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+    const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    const otpLastSentAt = new Date();
 
     const user = await User.create({
       email: normalizedEmail,
@@ -56,19 +59,95 @@ export async function register(req, res) {
       isVerified: false,
       otpHash,
       otpExpiresAt,
-      otpLastSentAt: new Date()
+      otpLastSentAt
     });
 
-    // Send verification email
-    await sendOtpEmail({ to: user.email, otp });
+    await sendOtpEmail({ to: normalizedEmail, otp });
 
     res.status(201).json({
-      message: 'Registration successful. A 6-digit verification code has been sent to your email.',
+      message: 'Registration successful. Verification code sent to your email.',
       requiresVerification: true,
-      email: user.email
+      email: normalizedEmail
     });
   } catch (err) {
     res.status(500).json({ error: err.message || 'Registration failed' });
+  }
+}
+
+export async function sendOtp(req, res) {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json({ error: 'Email is required' });
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (user.isVerified) return res.status(400).json({ error: 'User is already verified' });
+
+    // Enforce 60s resend cooldown
+    const COOLDOWN_MS = 60 * 1000;
+    if (user.otpLastSentAt) {
+      const elapsed = Date.now() - new Date(user.otpLastSentAt).getTime();
+      if (elapsed < COOLDOWN_MS) {
+        const retryAfter = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
+        return res.status(429).json({
+          error: 'Please wait before requesting another verification code',
+          retryAfter
+        });
+      }
+    }
+
+    const otp = generateOtp();
+    user.otpHash = await bcrypt.hash(otp, 10);
+    user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+    user.otpLastSentAt = new Date();
+    await user.save();
+
+    await sendOtpEmail({ to: normalizedEmail, otp });
+
+    res.json({
+      message: 'Verification code sent to your email',
+      email: normalizedEmail
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to send verification code' });
+  }
+}
+
+export async function verifyOtp(req, res) {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) return res.status(400).json({ error: 'Email and verification code are required' });
+
+    const normalizedEmail = email.trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail });
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    if (!user.otpHash || !user.otpExpiresAt) {
+      return res.status(400).json({ error: 'No verification code requested or code has expired' });
+    }
+
+    if (new Date() > new Date(user.otpExpiresAt)) {
+      return res.status(400).json({ error: 'Verification code has expired' });
+    }
+
+    const isMatch = await bcrypt.compare(otp, user.otpHash);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Invalid verification code' });
+    }
+
+    user.isVerified = true;
+    user.otpHash = null;
+    user.otpExpiresAt = null;
+    user.otpLastSentAt = null;
+    await user.save();
+
+    res.json({
+      message: 'Email verified successfully',
+      token: signToken(user._id),
+      user: sanitizeUser(user)
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message || 'Failed to verify code' });
   }
 }
 
@@ -88,10 +167,9 @@ export async function login(req, res) {
       return res.status(401).json({ error: 'Incorrect password. Please try again.' });
     }
 
-    // Gating check for unverified email
     if (!user.isVerified) {
       return res.status(403).json({
-        error: 'Please verify your email before logging in.',
+        error: 'Please verify your email address before logging in.',
         requiresVerification: true,
         email: user.email
       });
@@ -103,96 +181,6 @@ export async function login(req, res) {
     });
   } catch (err) {
     res.status(500).json({ error: err.message || 'Login failed' });
-  }
-}
-
-export async function sendOtp(req, res) {
-  try {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email is required' });
-
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: normalizedEmail });
-    if (!user) {
-      return res.status(404).json({ error: 'No account found with this email' });
-    }
-
-    if (user.isVerified) {
-      return res.json({ message: 'Account is already verified.', isVerified: true });
-    }
-
-    // Rate-limiting: 60s cooldown
-    if (user.otpLastSentAt) {
-      const elapsed = Date.now() - new Date(user.otpLastSentAt).getTime();
-      if (elapsed < 60 * 1000) {
-        const retryAfter = Math.ceil((60 * 1000 - elapsed) / 1000);
-        return res.status(429).json({
-          error: `Please wait ${retryAfter} seconds before requesting a new code.`,
-          retryAfter
-        });
-      }
-    }
-
-    const otp = Math.floor(100000 + Math.random() * 900000).toString();
-    user.otpHash = await bcrypt.hash(otp, 10);
-    user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    user.otpLastSentAt = new Date();
-    await user.save();
-
-    await sendOtpEmail({ to: user.email, otp });
-
-    res.json({
-      message: 'Verification code sent to your email.',
-      email: user.email,
-      expiresIn: 600
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message || 'Failed to send verification code' });
-  }
-}
-
-export async function verifyOtp(req, res) {
-  try {
-    const { email, otp } = req.body;
-    if (!email || !otp) {
-      return res.status(400).json({ error: 'Email and 6-digit verification code are required' });
-    }
-
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: normalizedEmail });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    if (user.isVerified) {
-      return res.json({
-        message: 'Email already verified.',
-        token: signToken(user._id),
-        user: sanitizeUser(user)
-      });
-    }
-
-    if (!user.otpHash || !user.otpExpiresAt || new Date(user.otpExpiresAt) < new Date()) {
-      return res.status(400).json({ error: 'Verification code has expired. Please request a new one.' });
-    }
-
-    const isMatch = await bcrypt.compare(String(otp).trim(), user.otpHash);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid verification code. Please check and try again.' });
-    }
-
-    user.isVerified = true;
-    user.otpHash = null;
-    user.otpExpiresAt = null;
-    await user.save();
-
-    res.json({
-      message: 'Email verified successfully!',
-      token: signToken(user._id),
-      user: sanitizeUser(user)
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message || 'Failed to verify code' });
   }
 }
 

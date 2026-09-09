@@ -24,8 +24,9 @@ const userSchema = new mongoose.Schema({
     aiCoachRequestsThisMonth: { type: Number, default: 0 },
     lastUsageReset: { type: Date, default: Date.now }
   },
-  // OTP Verification
   isVerified: { type: Boolean, default: false },
+
+  // OTP Verification Fields
   otpHash: { type: String, default: null },
   otpExpiresAt: { type: Date, default: null },
   otpLastSentAt: { type: Date, default: null },
@@ -58,6 +59,7 @@ userSchema.virtual('plan').get(function () {
     this.subscription.plan = 'free';
   }
 });
+
 
 userSchema.methods.comparePassword = function (plain) {
   return bcrypt.compare(plain, this.passwordHash);
