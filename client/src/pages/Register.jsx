@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Sparkles } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';
 
 export default function Register() {
@@ -9,7 +10,7 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  // login is NOT used here — AuthContext only receives a token after OTP verification in VerifyOtp.jsx
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   async function handleSubmit(e) {
@@ -18,13 +19,10 @@ export default function Register() {
     setLoading(true);
     try {
       const res = await api.register(email, password);
-      // DIAGNOSTIC LOG — remove after confirming flow works
-      console.log('[Register] api.register() resolved with:', JSON.stringify(res));
-      console.log('[Register] res.email:', res?.email, '| res.requiresVerification:', res?.requiresVerification);
-      console.log('[Register] Navigating to:', `/verify-otp?email=${encodeURIComponent(res.email || email)}`);
-      // Server always returns requiresVerification: true (no token on registration)
-      // Navigate to OTP step, passing the email so VerifyOtp.jsx pre-fills it
-      navigate(`/verify-otp?email=${encodeURIComponent(res.email || email)}`);
+      if (res.token && res.user) {
+        login(res.token, res.user);
+      }
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

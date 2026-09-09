@@ -17,7 +17,6 @@ import Pricing from './pages/Pricing';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentCancel from './pages/PaymentCancel';
 import Billing from './pages/Billing';
-import VerifyOtp from './pages/VerifyOtp';
 import Profile from './pages/Profile';
 
 function PrivateRoute({ children }) {
@@ -34,7 +33,6 @@ export default function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/verify-otp" element={<VerifyOtp />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route
               path="/payment/success"

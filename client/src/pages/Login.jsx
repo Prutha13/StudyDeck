@@ -22,10 +22,6 @@ export default function Login() {
       login(token, user);
       navigate('/dashboard');
     } catch (err) {
-      if (err.requiresVerification) {
-        navigate(`/verify-otp?email=${encodeURIComponent(err.email || email)}`);
-        return;
-      }
       setError(err.message);
     } finally {
       setLoading(false);

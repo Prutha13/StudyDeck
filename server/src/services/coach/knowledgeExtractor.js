@@ -4,7 +4,8 @@ import Topic from '../../models/Topic.js';
 import Concept from '../../models/Concept.js';
 import ConceptDependency from '../../models/ConceptDependency.js';
 
-const PREFERRED_MODELS = ['gemini-2.5-flash', 'gemini-flash-latest', 'gemini-3.6-flash', 'gemini-3.5-flash', 'gemini-3.5-flash-lite'];
+// Google Deprecations Ref: https://ai.google.dev/gemini-api/docs/deprecations
+const PREFERRED_MODELS = ['gemini-3.1-flash-lite', 'gemini-3-flash-preview', 'gemini-flash-latest'];
 const GEMINI_TIMEOUT_MS = 30000;
 
 function withTimeout(promise, ms, label) {

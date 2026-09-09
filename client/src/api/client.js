@@ -60,39 +60,6 @@ export async function login(email, password) {
   if (!res.ok) {
     const data = await res.json().catch(() => ({}));
     const err = new Error(data.error || 'Invalid credentials');
-    err.requiresVerification = data.requiresVerification;
-    err.email = data.email;
-    err.status = res.status;
-    throw err;
-  }
-  return res.json();
-}
-
-export async function sendOtp(email) {
-  const res = await fetch(`${BASE_URL}/auth/send-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email })
-  });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    const err = new Error(data.error || 'Failed to send verification code');
-    err.retryAfter = data.retryAfter;
-    err.status = res.status;
-    throw err;
-  }
-  return res.json();
-}
-
-export async function verifyOtp(email, otp) {
-  const res = await fetch(`${BASE_URL}/auth/verify-otp`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, otp })
-  });
-  if (!res.ok) {
-    const data = await res.json().catch(() => ({}));
-    const err = new Error(data.error || 'Failed to verify code');
     err.status = res.status;
     throw err;
   }
