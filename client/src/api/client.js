@@ -66,6 +66,39 @@ export async function login(email, password) {
   return res.json();
 }
 
+export async function sendOtp(email) {
+  if (USE_MOCKS) return Promise.resolve({ sent: true });
+  const res = await fetch(`${BASE_URL}/auth/send-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email })
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const err = new Error(data.error || 'Failed to send code');
+    err.status = res.status;
+    if (data.retryAfter) err.retryAfter = data.retryAfter;
+    throw err;
+  }
+  return res.json();
+}
+
+export async function verifyOtp(email, otp) {
+  if (USE_MOCKS) return mockAuth(email);
+  const res = await fetch(`${BASE_URL}/auth/verify-otp`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, otp })
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    const err = new Error(data.error || 'Invalid or expired code');
+    err.status = res.status;
+    throw err;
+  }
+  return res.json();
+}
+
 export async function updateProfile(token, profileData) {
   const res = await fetch(`${BASE_URL}/auth/profile`, {
     method: 'PATCH',

@@ -9,6 +9,7 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [needsVerification, setNeedsVerification] = useState(false);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function Login() {
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
+    setNeedsVerification(false);
     setLoading(true);
     try {
       const { token, user } = await api.login(email, password);
@@ -23,6 +25,9 @@ export default function Login() {
       navigate('/dashboard');
     } catch (err) {
       setError(err.message);
+      if (err.status === 403) {
+        setNeedsVerification(true);
+      }
     } finally {
       setLoading(false);
     }
@@ -62,7 +67,15 @@ export default function Login() {
 
           {error && (
             <div className="text-xs text-rose-300 bg-rose-500/10 border border-rose-500/25 rounded-xl px-4 py-3 mb-5">
-              {error}
+              <p>{error}</p>
+              {needsVerification && (
+                <Link
+                  to={`/verify-otp?email=${encodeURIComponent(email)}`}
+                  className="inline-block mt-2 text-amber-300 hover:text-amber-200 font-semibold underline underline-offset-2"
+                >
+                  Verify your email now &rarr;
+                </Link>
+              )}
             </div>
           )}
 
@@ -105,4 +118,3 @@ export default function Login() {
     </div>
   );
 }
-

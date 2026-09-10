@@ -246,13 +246,22 @@ export async function handleWebhookEvent(rawBody, signature) {
 
   switch (event.type) {
     case 'checkout.session.completed': {
-      if (dataObject.mode === 'subscription') {
-        const subscriptionId = dataObject.subscription;
-        const userId = dataObject.client_reference_id || dataObject.metadata?.userId;
+      const userId = dataObject.client_reference_id || dataObject.metadata?.userId;
+      const subscriptionId = dataObject.subscription;
 
-        if (subscriptionId) {
-          const subscription = await stripe.subscriptions.retrieve(subscriptionId);
-          await syncSubscriptionState(subscription, userId);
+      if (subscriptionId) {
+        const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+        await syncSubscriptionState(subscription, userId);
+      } else if (userId) {
+        // Direct non-subscription checkout session completion
+        const user = await User.findById(userId);
+        if (user) {
+          user.subscription = user.subscription || {};
+          user.subscription.plan = 'premium';
+          user.subscription.status = 'active';
+          user.subscription.stripeCustomerId = dataObject.customer || user.subscription.stripeCustomerId || null;
+          await user.save();
+          console.log(`[STRIPE WEBHOOK] Direct user upgrade for checkout.session.completed (User: ${user._id})`);
         }
       }
       break;

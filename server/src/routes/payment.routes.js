@@ -5,13 +5,17 @@ import {
   getSubscription,
   createCheckout,
   verifySession,
-  createPortal
+  createPortal,
+  webhookHandler
 } from '../controllers/payment.controller.js';
 
 const router = express.Router();
 
 // Public / info
 router.get('/plans', getPlans);
+
+// Webhook endpoint (unauthenticated, raw body required for Stripe signature verification)
+router.post('/webhook', express.raw({ type: 'application/json' }), webhookHandler);
 
 // Authenticated user subscription management
 router.get('/subscription', authMiddleware, getSubscription);
