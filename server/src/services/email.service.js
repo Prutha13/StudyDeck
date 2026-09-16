@@ -14,12 +14,15 @@ export function _getLatestTestOtp() {
  */
 async function sendMail({ to, subject, text, html }) {
   const user = process.env.GMAIL_USER || process.env.SMTP_USER || process.env.EMAIL_USER || 'pruthathakor13@gmail.com';
-  const pass = process.env.GMAIL_APP_PASS || process.env.SMTP_PASS || process.env.EMAIL_PASS || '';
+  const rawPass = process.env.GMAIL_APP_PASS || process.env.SMTP_PASS || process.env.EMAIL_PASS || '';
+  const pass = rawPass.replace(/\s+/g, ''); // Remove all spaces from App Password
 
   if (!pass) {
-    console.warn(`[EmailService] GMAIL_APP_PASS is not configured in environment. OTP logged for dev testing.`);
+    console.error(`[EmailService] CRITICAL: GMAIL_APP_PASS is missing in Render Environment Variables. Cannot send email.`);
     return { id: 'simulated-dev-mode' };
   }
+
+  console.log(`[EmailService] Dispatching email to ${to} via Gmail SMTP (${user})...`);
 
   const host = process.env.SMTP_HOST || 'smtp.gmail.com';
   const port = parseInt(process.env.SMTP_PORT || '587', 10);
@@ -50,6 +53,7 @@ async function sendMail({ to, subject, text, html }) {
     html
   });
 
+  console.log(`[EmailService] SUCCESS: Email sent to ${to}. MessageId: ${info.messageId}`);
   return info;
 }
 
