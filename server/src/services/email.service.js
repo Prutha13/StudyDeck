@@ -21,12 +21,23 @@ async function sendMail({ to, subject, text, html }) {
     return { id: 'simulated-dev-mode' };
   }
 
+  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
+  const port = parseInt(process.env.SMTP_PORT || '587', 10);
+  const secure = process.env.SMTP_SECURE === 'true'; // false for port 587
+
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host,
+    port,
+    secure,
+    requireTLS: true,
     auth: {
       user,
       pass
-    }
+    },
+    family: 4, // Force IPv4 to prevent IPv6 connection timeouts on cloud hosts
+    connectionTimeout: 15000,
+    greetingTimeout: 15000,
+    socketTimeout: 20000
   });
 
   const from = `"StudyDeck Verification" <${user}>`;
