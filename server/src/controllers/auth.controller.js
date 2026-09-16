@@ -77,7 +77,8 @@ export async function register(req, res) {
     }
 
     try {
-      await sendOtpEmail({ to: normalizedEmail, otp });
+      const result = await sendOtpEmail({ to: normalizedEmail, otp });
+      console.log(`[Auth] sendOtpEmail result for ${normalizedEmail}:`, result);
     } catch (emailErr) {
       console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
     }
@@ -122,7 +123,8 @@ export async function sendOtp(req, res) {
     await user.save();
 
     try {
-      await sendOtpEmail({ to: normalizedEmail, otp });
+      const result = await sendOtpEmail({ to: normalizedEmail, otp });
+      console.log(`[Auth] sendOtpEmail result for ${normalizedEmail}:`, result);
     } catch (emailErr) {
       console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
     }
