@@ -28,5 +28,7 @@ services:
         sync: false
       - key: STRIPE_YEARLY_PRICE_ID
         sync: false
-      - key: RESEND_API_KEY
+      - key: GMAIL_USER
+        sync: false
+      - key: GMAIL_APP_PASS
         sync: false

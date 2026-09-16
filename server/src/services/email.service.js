@@ -1,5 +1,4 @@
-const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
-const SENDER = { name: 'StudyDeck', email: 'pruthathakor13@gmail.com' };
+import nodemailer from 'nodemailer';
 
 let latestTestOtp = null;
 
@@ -11,44 +10,47 @@ export function _getLatestTestOtp() {
 }
 
 /**
- * Internal helper: send an email via Brevo's transactional email API.
+ * Internal helper: send an email via Nodemailer using Gmail SMTP.
  */
-async function sendViaBrevo({ to, subject, text, html }) {
-  const response = await fetch(BREVO_API_URL, {
-    method: 'POST',
-    headers: {
-      'accept': 'application/json',
-      'api-key': process.env.BREVO_API_KEY || '',
-      'content-type': 'application/json'
-    },
-    body: JSON.stringify({
-      sender: SENDER,
-      to: [{ email: to }],
-      subject,
-      textContent: text,
-      htmlContent: html
-    })
-  });
+async function sendMail({ to, subject, text, html }) {
+  const user = process.env.GMAIL_USER || process.env.SMTP_USER || process.env.EMAIL_USER || 'pruthathakor13@gmail.com';
+  const pass = process.env.GMAIL_APP_PASS || process.env.SMTP_PASS || process.env.EMAIL_PASS || '';
 
-  const data = await response.json().catch(() => ({}));
-
-  if (!response.ok) {
-    const message = data?.message || `Brevo API returned status ${response.status}`;
-    throw new Error(message);
+  if (!pass) {
+    console.warn(`[EmailService] GMAIL_APP_PASS is not configured in environment. OTP logged for dev testing.`);
+    return { id: 'simulated-dev-mode' };
   }
 
-  return data;
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user,
+      pass
+    }
+  });
+
+  const from = `"StudyDeck Verification" <${user}>`;
+
+  const info = await transporter.sendMail({
+    from,
+    to,
+    subject,
+    text,
+    html
+  });
+
+  return info;
 }
 
 /**
- * Send welcome / transactional notification email via Brevo API.
+ * Send welcome / transactional notification email via Nodemailer.
  */
 export async function sendWelcomeEmail({ to }) {
   if (!to) return;
   const normalizedEmail = to.trim().toLowerCase();
 
   try {
-    const data = await sendViaBrevo({
+    const data = await sendMail({
       to: normalizedEmail,
       subject: 'Welcome to StudyDeck!',
       text: 'Welcome to StudyDeck! Start transforming your lecture notes into instant summaries and study decks.',
@@ -70,7 +72,7 @@ export async function sendWelcomeEmail({ to }) {
 }
 
 /**
- * Send OTP verification code email via Brevo API.
+ * Send OTP verification code email via Nodemailer.
  */
 export async function sendOtpEmail({ to, otp }) {
   if (!to || !otp) return;
@@ -78,9 +80,9 @@ export async function sendOtpEmail({ to, otp }) {
   latestTestOtp = otp;
 
   try {
-    const data = await sendViaBrevo({
+    const data = await sendMail({
       to: normalizedEmail,
-      subject: `Your StudyDeck Verification Code: ${otp}`,
+      subject: `${otp} is your StudyDeck verification code`,
       text: `Your verification code is ${otp}. It expires in 10 minutes.`,
       html: `
         <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 24px; background-color: #0d1117; color: #e6edf3; border-radius: 16px; border: 1px solid #30363d;">
@@ -90,7 +92,7 @@ export async function sendOtpEmail({ to, otp }) {
             <div style="font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #58a6ff; margin: 24px 0; background: #161b22; padding: 16px; border-radius: 8px; border: 1px solid #30363d;">
               ${otp}
             </div>
-            <p style="font-size: 12px; color: #8b949e;">This code will expire in 10 minutes.</p>
+            <p style="font-size: 12px; color: #8b949e;">This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
           </div>
         </div>
       `
