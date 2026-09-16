@@ -1,6 +1,6 @@
-// Central place for every backend call.
-// Default to same-origin `/api` so Vite can proxy to the Express server.
-const BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const BASE_URL =
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.PROD ? 'https://studydeck-exg9.onrender.com/api' : '/api');
 const USE_MOCKS = false;
 
 function authHeaders(token) {
