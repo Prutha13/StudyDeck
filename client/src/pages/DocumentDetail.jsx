@@ -10,7 +10,6 @@ import {
   Layers,
   Send,
   RotateCw,
-  Sparkles,
   History,
   Bot,
   Network,
@@ -269,7 +268,7 @@ export default function DocumentDetail() {
             <motion.div variants={item}>
               <div className="flex items-center justify-between mb-3.5">
                 <h2 className="text-xs font-semibold text-amber-400 uppercase tracking-widest flex items-center gap-2">
-                  <Sparkles size={14} className="text-amber-400" /> Executive Summary
+                  Executive Summary
                 </h2>
                 <button
                   onClick={() => {
@@ -609,7 +608,7 @@ export default function DocumentDetail() {
                 {chatLoading && (
                   <div className="flex justify-start">
                     <div className="glass-card text-xs text-slate-400 px-4 py-3 rounded-2xl animate-pulse flex items-center gap-2">
-                      <Sparkles size={14} className="text-amber-400 animate-spin" /> AI Tutor is thinking…
+                      AI Tutor is thinking…
                     </div>
                   </div>
                 )}
@@ -638,9 +637,6 @@ export default function DocumentDetail() {
           </motion.div>
         ) : (
           <div className="glass-panel rounded-2xl p-10 text-center border border-white/10 shadow-2xl">
-            <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/10">
-              <Sparkles size={24} />
-            </div>
             <h3 className="text-base font-bold text-white mb-2">Generating Summary Deck…</h3>
             <p className="text-xs text-slate-400 max-w-md mx-auto mb-6">
               Click below to generate or refresh executive summaries, interactive flashcards, and practice quizzes for this document.

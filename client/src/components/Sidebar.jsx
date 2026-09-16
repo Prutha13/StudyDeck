@@ -6,7 +6,6 @@ import {
   LogOut,
   BookOpen,
   LayoutDashboard,
-  Sparkles,
   SunMedium,
   Moon,
   Flame,
@@ -91,9 +90,6 @@ export default function Sidebar({ stats, mobileOpen, setMobileOpen }) {
                 <div className="w-full h-full bg-ink rounded-[11px] flex items-center justify-center">
                   <BookOpen size={19} className="text-amber-500 dark:text-amber-400 group-hover:scale-110 transition-transform duration-300" />
                 </div>
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-paper border border-slate-200 dark:border-white/10 flex items-center justify-center">
-                  <Sparkles size={9} className="text-amber-500 dark:text-amber-400 animate-pulse" />
-                </span>
               </div>
               <div className={`transition-all duration-200 whitespace-nowrap overflow-hidden ${isExpanded ? 'opacity-100 w-auto translate-x-0 ml-3' : 'opacity-0 w-0 -translate-x-2 pointer-events-none hidden md:block'}`}>
                 <span className="font-bold text-lg tracking-tight text-slate-900 dark:text-white block leading-none">StudyDeck</span>

@@ -10,8 +10,7 @@ import {
   AlertCircle,
   Save,
   ShieldCheck,
-  Crown,
-  Sparkles
+  Crown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';

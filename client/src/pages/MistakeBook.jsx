@@ -7,7 +7,6 @@ import {
   CheckCircle2,
   XCircle,
   HelpCircle,
-  Sparkles,
   ArrowRight,
   RotateCw,
   Search,
@@ -256,7 +255,6 @@ export default function MistakeBook() {
                 {/* AI Misconception Diagnosis Box */}
                 <div className="rounded-2xl p-5 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 space-y-3">
                   <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider">
-                    <Sparkles size={14} className="text-amber-400" />
                     AI Misconception Diagnosis
                   </div>
 

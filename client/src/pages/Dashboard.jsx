@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, UploadCloud, Search, Plus, Sparkles, BookOpen, Flame } from 'lucide-react';
+import { X, UploadCloud, Search, Plus, BookOpen, Flame } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import GlassDocumentCard from '../components/GlassDocumentCard';
 import * as api from '../api/client';
@@ -328,9 +328,6 @@ function NewDocumentModal({ onClose, onCreated }) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-              <Sparkles size={16} className="text-amber-400" />
-            </div>
             <h2 className="font-bold text-xl text-white tracking-tight">New Document</h2>
           </div>
           <button
@@ -503,7 +500,7 @@ function NewDocumentModal({ onClose, onCreated }) {
                 }}
                 className="btn-gold py-1.5 px-3 rounded-lg text-[11px] font-bold text-black cursor-pointer shadow-md inline-flex items-center gap-1.5"
               >
-                <Sparkles size={12} /> Upgrade to Pro
+                Upgrade to Pro
               </button>
             )}
           </div>

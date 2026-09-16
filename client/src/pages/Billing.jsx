@@ -5,7 +5,6 @@ import {
   Crown,
   CreditCard,
   Calendar,
-  Sparkles,
   ExternalLink,
   ShieldCheck,
   AlertTriangle,
@@ -169,7 +168,7 @@ export default function Billing() {
                   to="/pricing"
                   className="btn-gold py-2.5 px-5 rounded-xl font-bold text-xs flex items-center gap-2 cursor-pointer shadow-lg shadow-amber-500/25 self-start sm:self-auto"
                 >
-                  <Sparkles size={14} /> Upgrade to Pro
+                  Upgrade to Pro
                 </Link>
               ) : (
                 <div className="text-right self-start sm:self-auto">

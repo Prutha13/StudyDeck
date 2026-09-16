@@ -6,7 +6,6 @@ import {
   BookOpen,
   Cpu,
   GitFork,
-  Sparkles,
   TrendingUp,
   AlertTriangle,
   CheckCircle2,
@@ -141,7 +140,6 @@ export default function KnowledgeMap() {
         <div className="glass-panel rounded-2xl p-5 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-transparent flex flex-col justify-between">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Overall Mastery</span>
-            <Sparkles size={16} className="text-amber-400" />
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-white tracking-tight">{stats.overallScore}%</span>

@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Flame,
-  Sparkles,
   ArrowRight,
   ArrowLeft,
   CheckCircle2,
@@ -142,7 +141,7 @@ export default function FixWeakness() {
                 <Crown size={28} />
               </div>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold mb-3">
-                <Sparkles size={13} /> StudyDeck Pro Feature
+                StudyDeck Pro Feature
               </div>
               <h2 className="text-xl font-bold text-white mb-2">Unlock 5-Step Weakness Repair</h2>
               <p className="text-xs text-slate-300 mb-8 max-w-md mx-auto leading-relaxed">
@@ -153,7 +152,7 @@ export default function FixWeakness() {
                   onClick={() => navigate('/pricing')}
                   className="btn-gold text-xs font-bold py-3 px-6 rounded-xl cursor-pointer shadow-lg shadow-amber-500/25 flex items-center justify-center gap-2"
                 >
-                  <Sparkles size={14} /> Upgrade to Pro
+                  Upgrade to Pro
                 </button>
                 <button
                   onClick={() => navigate('/knowledge-map')}
@@ -328,7 +327,6 @@ export default function FixWeakness() {
           >
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
-                <Sparkles size={14} />
                 Step {currentStep}: {currentQuestion.level}
               </span>
               <span className="text-[11px] text-slate-400">Step {currentStep} of 5</span>

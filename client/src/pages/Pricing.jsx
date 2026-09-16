@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import {
   Check,
-  Sparkles,
   Zap,
   ArrowRight,
   ShieldCheck,
@@ -178,7 +177,7 @@ export default function Pricing() {
             <div>
               <div className="flex items-center justify-between mb-4">
                 <span className="text-xs font-bold uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
-                  <Sparkles size={14} className="text-amber-400" /> StudyDeck Pro
+                  StudyDeck Pro
                 </span>
                 {isPremium && (
                   <span className="px-3 py-1 rounded-full bg-amber-500/20 border border-amber-500/40 text-[11px] font-bold text-amber-300">
@@ -233,7 +232,7 @@ export default function Pricing() {
                 </>
               ) : (
                 <>
-                  Upgrade to Pro <Sparkles size={15} />
+                  Upgrade to Pro
                 </>
               )}
             </button>

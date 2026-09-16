@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { BookOpen, Sparkles } from 'lucide-react';
+import { BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';
 
@@ -55,7 +55,7 @@ export default function Register() {
             </div>
           </div>
           <h1 className="font-bold text-3xl text-white tracking-tight flex items-center justify-center gap-2">
-            StudyDeck <Sparkles size={16} className="text-amber-400" />
+            StudyDeck
           </h1>
           <p className="text-slate-400 text-xs mt-1.5">Transform lecture notes into instant summaries & study decks.</p>
         </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { ArrowLeft, RotateCw, Check, X, Shuffle, Layers, Sparkles } from 'lucide-react';
+import { ArrowLeft, RotateCw, Check, X, Shuffle, Layers } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';
 
@@ -185,7 +185,7 @@ export default function Flashcards() {
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs uppercase tracking-widest text-amber-400 font-semibold flex items-center gap-1.5">
-                      <Sparkles size={13} /> Prompt / Concept
+                      Prompt / Concept
                     </span>
                     <span className="text-[11px] text-slate-500">Click to reveal answer</span>
                   </div>
@@ -263,9 +263,6 @@ export default function Flashcards() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-12 glass-panel rounded-2xl p-10 border border-white/10"
           >
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-400 flex items-center justify-center mx-auto mb-5 shadow-lg shadow-amber-500/10">
-              <Sparkles size={32} />
-            </div>
             <h2 className="font-bold text-3xl text-white mb-2 tracking-tight">
               Deck Complete! 🎉
             </h2>

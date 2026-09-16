@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   BookOpen,
-  Sparkles,
   UploadCloud,
   Wand2,
   Brain,
@@ -296,7 +295,6 @@ export default function Landing() {
       <section className="relative z-10 max-w-6xl mx-auto px-5 sm:px-8 pt-32 sm:pt-40 pb-20 sm:pb-28 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
         <motion.div initial="hidden" animate="show" variants={stagger}>
           <motion.div variants={fadeUp} className="inline-flex items-center gap-2 text-xs font-semibold text-amber-300 bg-amber-500/10 border border-amber-500/25 rounded-full px-3.5 py-1.5 mb-6">
-            <Sparkles size={14} className="text-amber-400 animate-pulse" />
             <span>AI-Powered Study Workspace</span>
           </motion.div>
 

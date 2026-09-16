@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useLocation, useNavigate, useParams, Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowLeft, Check, X, RotateCcw, Layers, Sparkles, Award } from 'lucide-react';
+import { ArrowLeft, Check, X, RotateCcw, Layers, Award } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import * as api from '../api/client';
 
@@ -219,7 +219,6 @@ export default function Quiz() {
                 <div className="mb-6 rounded-2xl p-5 bg-gradient-to-br from-amber-500/15 via-rose-500/10 to-transparent border border-amber-500/30 shadow-xl space-y-2.5">
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-                      <Sparkles size={14} className="text-amber-400" />
                       AI Mistake Diagnosis
                     </span>
                     <span className="text-[10px] font-semibold text-rose-300 bg-rose-500/15 px-2 py-0.5 rounded-full border border-rose-500/30">
@@ -229,7 +228,6 @@ export default function Quiz() {
 
                   {diagnosisLoading ? (
                     <div className="flex items-center gap-2 text-xs text-slate-300 animate-pulse py-2">
-                      <Sparkles size={14} className="animate-spin text-amber-400" />
                       AI Coach is diagnosing your misconception…
                     </div>
                   ) : currentDiagnosis ? (

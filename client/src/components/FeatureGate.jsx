@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { Crown, Sparkles, ArrowRight } from 'lucide-react';
+import { Crown, ArrowRight } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
 /**
@@ -49,7 +49,6 @@ export default function FeatureGate({
   if (mode === 'inline') {
     return (
       <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-medium">
-        <Sparkles size={13} className="text-amber-400 shrink-0" />
         <span>Pro required</span>
         <Link
           to="/pricing"
@@ -79,7 +78,7 @@ export default function FeatureGate({
           to="/pricing"
           className="btn-gold py-2 px-4 rounded-xl text-xs font-bold flex items-center gap-1.5 shrink-0 cursor-pointer shadow-lg shadow-amber-500/20"
         >
-          <Sparkles size={13} /> Upgrade to Pro
+          Upgrade to Pro
         </Link>
       </div>
     );
@@ -93,7 +92,7 @@ export default function FeatureGate({
       </div>
 
       <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/30 text-amber-300 text-[11px] font-bold uppercase tracking-wider mb-3">
-        <Sparkles size={12} /> StudyDeck Pro Feature
+        StudyDeck Pro Feature
       </span>
 
       <h3 className="text-xl font-bold text-white tracking-tight mb-2">
@@ -109,7 +108,7 @@ export default function FeatureGate({
           to="/pricing"
           className="btn-gold w-full sm:w-auto py-3 px-6 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-amber-500/25"
         >
-          <Sparkles size={14} /> Upgrade to Pro <ArrowRight size={14} />
+          Upgrade to Pro <ArrowRight size={14} />
         </Link>
       </div>
     </div>

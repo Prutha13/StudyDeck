@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain,
-  Sparkles,
   CheckCircle2,
   Clock,
   ArrowRight,
