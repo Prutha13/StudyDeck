@@ -52,6 +52,7 @@ export async function register(req, res) {
 
     const passwordHash = await bcrypt.hash(password, 10);
     const otp = generateOtp();
+    console.log(`[Auth] Generated OTP for ${normalizedEmail}: ${otp}`);
     const otpHash = await bcrypt.hash(otp, 10);
     const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
     const otpLastSentAt = new Date();
@@ -117,6 +118,7 @@ export async function sendOtp(req, res) {
     }
 
     const otp = generateOtp();
+    console.log(`[Auth] Generated OTP for ${normalizedEmail}: ${otp}`);
     user.otpHash = await bcrypt.hash(otp, 10);
     user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
     user.otpLastSentAt = new Date();
