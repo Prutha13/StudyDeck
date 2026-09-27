@@ -18,6 +18,7 @@ const configuredOrigins = rawOrigins
   .filter(Boolean);
 
 const isLocalhost = (origin) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+const isNetlify = (origin) => /^https?:\/\/.*\.netlify\.(app|live)$/i.test(origin);
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -26,8 +27,8 @@ app.use(cors({
 
     const normalizedOrigin = origin.replace(/\/+$/, '');
 
-    // Always allow local dev origins (e.g. http://localhost:5173, http://localhost:5174)
-    if (isLocalhost(normalizedOrigin)) {
+    // Always allow local dev origins and Netlify deployments
+    if (isLocalhost(normalizedOrigin) || isNetlify(normalizedOrigin)) {
       return callback(null, true);
     }
 
