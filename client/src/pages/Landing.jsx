@@ -162,7 +162,7 @@ export default function Landing() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2.5 group">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-600 p-[1px] shadow-lg shadow-amber-500/20 group-hover:shadow-amber-500/40 transition-shadow">
-              <div className="w-full h-full bg-ink rounded-[11px] flex items-center justify-center">
+              <div className="w-full h-full bg-[#080b11] rounded-[11px] flex items-center justify-center">
                 <BookOpen size={19} className="text-amber-400" />
               </div>
             </div>
@@ -239,7 +239,7 @@ export default function Landing() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-ink/98 backdrop-blur-2xl md:hidden pt-24 px-6 flex flex-col justify-between pb-12"
+            className="fixed inset-0 z-40 bg-[#080b11]/98 backdrop-blur-2xl md:hidden pt-24 px-6 flex flex-col justify-between pb-12"
           >
             <div className="flex flex-col gap-6 text-lg font-medium">
               <a
@@ -375,7 +375,7 @@ export default function Landing() {
             </div>
 
             {/* Tab Preview Content */}
-            <div className="min-h-[180px] bg-ink/60 rounded-xl p-4 border border-white/5 text-xs">
+            <div className="min-h-[180px] bg-[#05070c] rounded-xl p-4 border border-white/10 text-xs">
               {activeTab === 'summary' && (
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-[11px] text-amber-400 font-semibold uppercase tracking-wider">
@@ -564,7 +564,7 @@ export default function Landing() {
       </section>
 
       {/* 7. FOOTER */}
-      <footer className="relative z-10 bg-ink border-t border-white/10 pt-16 pb-12">
+      <footer className="relative z-10 bg-[#06080e] border-t border-white/10 pt-16 pb-12">
         <div className="max-w-6xl mx-auto px-5 sm:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
             {/* Col 1 */}
