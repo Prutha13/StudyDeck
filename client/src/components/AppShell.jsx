@@ -33,7 +33,7 @@ export default function AppShell() {
   }, [token]);
 
   return (
-    <div className="relative h-screen flex bg-ink text-slate-900 dark:text-slate-100 selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200 overflow-hidden font-[var(--font-display)]">
+    <div className="relative h-screen flex bg-paper text-ink selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200 overflow-hidden font-[var(--font-display)]">
       <AmbientBackground />
 
       <Sidebar

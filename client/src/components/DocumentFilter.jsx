@@ -53,11 +53,11 @@ export default function DocumentFilter({ selected = 'all', onChange, className =
           onClick={() => onChange?.('all')}
           className={`flex items-center gap-1.5 text-xs px-3.5 py-1.5 rounded-xl border transition-all shrink-0 cursor-pointer ${
             selected === 'all'
-              ? 'border-amber-500/50 bg-amber-500/20 text-amber-300 font-semibold shadow-sm'
-              : 'border-white/10 bg-[#181a20] text-slate-400 hover:text-white hover:border-white/20'
+              ? 'border-amber-500/50 bg-amber-500/20 text-amber-800 dark:text-amber-300 font-semibold shadow-xs'
+              : 'border-slate-200 dark:border-white/10 bg-surface text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'
           }`}
         >
-          <Layers size={13} className={selected === 'all' ? 'text-amber-400' : 'text-slate-400'} />
+          <Layers size={13} className={selected === 'all' ? 'text-amber-600 dark:text-amber-400' : 'text-slate-500 dark:text-slate-400'} />
           <span>All Documents</span>
           <span className="text-[10px] opacity-70 ml-0.5">({documents.length})</span>
         </button>
@@ -73,11 +73,11 @@ export default function DocumentFilter({ selected = 'all', onChange, className =
               title={doc.title}
               className={`flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl border transition-all shrink-0 max-w-[200px] truncate cursor-pointer ${
                 isSelected
-                  ? 'border-amber-500/50 bg-amber-500/20 text-amber-300 font-semibold shadow-sm'
-                  : 'border-white/10 bg-[#181a20] text-slate-400 hover:text-white hover:border-white/20'
+                  ? 'border-amber-500/50 bg-amber-500/20 text-amber-800 dark:text-amber-300 font-semibold shadow-xs'
+                  : 'border-slate-200 dark:border-white/10 bg-surface text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:border-slate-300 dark:hover:border-white/20'
               }`}
             >
-              <FileText size={12} className={isSelected ? 'text-amber-400 shrink-0' : 'text-slate-400 shrink-0'} />
+              <FileText size={12} className={isSelected ? 'text-amber-600 dark:text-amber-400 shrink-0' : 'text-slate-500 dark:text-slate-400 shrink-0'} />
               <span className="truncate">{doc.title}</span>
             </button>
           );
@@ -89,7 +89,7 @@ export default function DocumentFilter({ selected = 'all', onChange, className =
         <select
           value={selected}
           onChange={(e) => onChange?.(e.target.value)}
-          className="w-full bg-[#181a20] border border-white/10 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-amber-500/50 appearance-none cursor-pointer"
+          className="w-full bg-surface border border-slate-200 dark:border-white/10 rounded-xl px-3 py-2 text-xs text-slate-900 dark:text-white focus:outline-none focus:border-amber-500/50 appearance-none cursor-pointer"
         >
           <option value="all">All Documents ({documents.length})</option>
           {documents.map((doc) => (
