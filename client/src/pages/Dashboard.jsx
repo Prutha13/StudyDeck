@@ -195,11 +195,11 @@ export default function Dashboard() {
           >
             {searchQuery ? (
               <>
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4">
+                <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4">
                   <Search size={22} />
                 </div>
-                <h3 className="text-base font-semibold text-white mb-1">No matching documents</h3>
-                <p className="text-xs text-slate-400 mb-5">No items found matching &ldquo;{searchQuery}&rdquo;</p>
+                <h3 className="text-base font-semibold text-slate-900 dark:text-white mb-1">No matching documents</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 mb-5">No items found matching &ldquo;{searchQuery}&rdquo;</p>
                 <button
                   onClick={() => setSearchQuery('')}
                   className="btn-glass text-xs font-medium py-2 px-4 rounded-lg cursor-pointer"
@@ -209,11 +209,11 @@ export default function Dashboard() {
               </>
             ) : (
               <>
-                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/10">
+                <div className="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-500/10">
                   <BookOpen size={26} />
                 </div>
-                <h3 className="text-lg font-bold text-white mb-1">No documents uploaded yet</h3>
-                <p className="text-xs text-slate-400 max-w-md mx-auto mb-6">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No documents uploaded yet</h3>
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
                   Upload lecture notes, transcripts, or PDF documents to unlock instant executive summaries, flashcard decks, and AI quiz practice.
                 </p>
                 <button
@@ -330,19 +330,19 @@ function NewDocumentModal({ onClose, onCreated }) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2.5">
-            <h2 className="font-bold text-xl text-white tracking-tight">New Document</h2>
+            <h2 className="font-bold text-xl text-slate-900 dark:text-white tracking-tight">New Document</h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-white/5 transition-colors cursor-pointer"
+            className="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white p-1 rounded-lg hover:bg-slate-200/60 dark:hover:bg-white/5 transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex gap-1.5 mb-6 p-1 bg-white/5 border border-white/10 rounded-xl w-fit">
+        <div className="flex gap-1.5 mb-6 p-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl w-fit">
           {['upload', 'paste'].map((m) => (
             <button
               key={m}
@@ -350,8 +350,8 @@ function NewDocumentModal({ onClose, onCreated }) {
               onClick={() => setMode(m)}
               className={`text-xs font-semibold px-4 py-2 rounded-lg transition-all cursor-pointer ${
                 mode === m
-                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-300 shadow-sm'
-                  : 'text-slate-400 hover:text-white'
+                  ? 'bg-amber-500/20 border border-amber-500/40 text-amber-800 dark:text-amber-300 shadow-sm'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
               }`}
             >
               {m === 'upload' ? 'Upload File' : 'Paste Text'}
@@ -360,12 +360,12 @@ function NewDocumentModal({ onClose, onCreated }) {
         </div>
 
         {/* Title Input */}
-        <label className="block text-xs font-medium text-slate-300 mb-1.5">Document Title</label>
+        <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Document Title</label>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           placeholder="e.g. Quantum Physics Lecture 4 Notes"
-          className="w-full rounded-xl px-4 py-2.5 text-sm mb-5 bg-[#181a20] border border-[#23262e] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+          className="w-full rounded-xl px-4 py-2.5 text-sm mb-5 bg-slate-50 dark:bg-[#181a20] border border-slate-200 dark:border-[#23262e] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
         />
 
         {mode === 'upload' ? (
@@ -382,20 +382,20 @@ function NewDocumentModal({ onClose, onCreated }) {
             }}
             className={`flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-xl py-9 mb-6 text-center transition-all ${
               dragActive
-                ? 'border-amber-400 bg-amber-500/10'
-                : 'border-white/10 bg-white/3 hover:border-white/20'
+                ? 'border-amber-500 bg-amber-500/10'
+                : 'border-slate-200 dark:border-white/10 bg-slate-50/50 dark:bg-white/3 hover:border-amber-500/40'
             }`}
           >
-            <div className="w-12 h-12 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-amber-400">
+            <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-white/5 border border-amber-500/30 dark:border-white/10 flex items-center justify-center text-amber-600 dark:text-amber-400">
               <UploadCloud size={24} />
             </div>
             {file ? (
-              <p className="text-sm font-semibold text-amber-300 px-4 truncate max-w-xs">{file.name}</p>
+              <p className="text-sm font-semibold text-amber-800 dark:text-amber-300 px-4 truncate max-w-xs">{file.name}</p>
             ) : (
               <>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-600 dark:text-slate-300">
                   Drag & drop your file here, or{' '}
-                  <label className="text-amber-400 font-semibold underline underline-offset-2 cursor-pointer hover:text-amber-300">
+                  <label className="text-amber-600 dark:text-amber-400 font-semibold underline underline-offset-2 cursor-pointer hover:text-amber-700 dark:hover:text-amber-300">
                     browse
                     <input
                       type="file"
@@ -411,13 +411,13 @@ function NewDocumentModal({ onClose, onCreated }) {
           </div>
         ) : (
           <>
-            <label className="block text-xs font-medium text-slate-300 mb-1.5">Transcript or Raw Notes</label>
+            <label className="block text-xs font-medium text-slate-700 dark:text-slate-300 mb-1.5">Transcript or Raw Notes</label>
             <textarea
               rows={5}
               value={rawText}
               onChange={(e) => setRawText(e.target.value)}
               placeholder="Paste the full lecture transcript or notes text here…"
-              className="w-full rounded-xl px-4 py-2.5 text-sm mb-6 resize-none bg-[#181a20] border border-[#23262e] text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
+              className="w-full rounded-xl px-4 py-2.5 text-sm mb-6 resize-none bg-slate-50 dark:bg-[#181a20] border border-slate-200 dark:border-[#23262e] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50 focus:ring-2 focus:ring-amber-500/20 transition-all"
             />
           </>
         )}

@@ -13,25 +13,25 @@ const FORMAT_CONFIG = {
 const STATUS_CONFIG = {
   pending: {
     label: 'Pending',
-    classes: 'bg-slate-900/60 text-slate-300 border-slate-700',
-    dot: 'bg-slate-400',
+    classes: 'bg-slate-100 dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 border-slate-300 dark:border-slate-700',
+    dot: 'bg-slate-500 dark:bg-slate-400',
     icon: null
   },
   processing: {
     label: 'Processing',
-    classes: 'bg-amber-950/40 text-amber-400 border-amber-500/30',
+    classes: 'bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-400 border-amber-300 dark:border-amber-500/30',
     dot: null,
     icon: Clock
   },
   done: {
     label: 'Done',
-    classes: 'bg-emerald-950/40 text-emerald-400 border-emerald-500/30',
-    dot: 'bg-emerald-400 shadow-[0_0_6px_#34d399]',
+    classes: 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-400 border-emerald-300 dark:border-emerald-500/30',
+    dot: 'bg-emerald-500 dark:bg-emerald-400 shadow-[0_0_6px_#34d399]',
     icon: null
   },
   failed: {
     label: 'Failed',
-    classes: 'bg-rose-950/40 text-rose-400 border-rose-500/30',
+    classes: 'bg-rose-100 dark:bg-rose-950/40 text-rose-800 dark:text-rose-400 border-rose-300 dark:border-rose-500/30',
     dot: null,
     icon: XCircle
   }
@@ -65,10 +65,7 @@ const itemVariants = {
 
 /**
  * GlassDocumentCard
- * Flat-panel list row for a study document — solid dark surface + amber
- * accents, matching the studydeck-ai-workspace design reference. Keeps the
- * same props contract (doc, onOpen, onStudy, onQuiz, onDelete) as before so
- * Dashboard.jsx didn't need to change how it calls this component.
+ * Flat-panel list row for a study document — responsive light/dark design.
  */
 export default function GlassDocumentCard({ doc, onOpen, onStudy, onQuiz, onDelete, onViewMastery, onReviewMistakes }) {
   const format = FORMAT_CONFIG[doc.sourceType] || FORMAT_CONFIG.pasted;
@@ -84,13 +81,13 @@ export default function GlassDocumentCard({ doc, onOpen, onStudy, onQuiz, onDele
       whileHover={{ y: -2 }}
       onClick={() => onOpen?.(doc)}
       className="group relative flex items-center justify-between gap-4 p-4 sm:p-5 rounded-2xl
-        bg-paper border border-slate-200/80 dark:border-[#23262e] hover:border-amber-500/40
+        bg-paper border border-slate-200 dark:border-[#23262e] hover:border-amber-500/40
         shadow-sm dark:shadow-md hover:shadow-lg
         transition-all duration-200 cursor-pointer select-none"
     >
       {/* Icon + title + metadata */}
       <div className="flex items-center gap-4 min-w-0">
-        <div className="w-12 h-12 rounded-xl bg-slate-100 dark:bg-[#181a20] border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:border-amber-400/60 group-hover:scale-105 transition-all shrink-0">
+        <div className="w-12 h-12 rounded-xl bg-amber-500/10 dark:bg-[#181a20] border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400 group-hover:border-amber-400/60 group-hover:scale-105 transition-all shrink-0">
           <FileText size={20} className="stroke-[2]" />
         </div>
 
@@ -103,20 +100,20 @@ export default function GlassDocumentCard({ doc, onOpen, onStudy, onQuiz, onDele
           <div className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400 mt-1 flex-wrap">
             <span>{dateLabel}</span>
 
-            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-300 text-[10px] font-mono font-semibold uppercase">
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded border border-amber-500/40 bg-amber-500/10 text-amber-800 dark:text-amber-300 text-[10px] font-mono font-semibold uppercase">
               <FormatIcon size={10} />
               {format.label}
             </span>
 
             {doc.quizCount > 0 && (
-              <span className="flex items-center gap-1 text-amber-400/90 font-medium">
+              <span className="flex items-center gap-1 text-amber-700 dark:text-amber-400/90 font-medium">
                 <HelpCircle size={13} />
                 {doc.quizCount} Qs
               </span>
             )}
 
             {doc.flashcardsCount > 0 && (
-              <span className="hidden md:flex items-center gap-1 text-slate-400">
+              <span className="hidden md:flex items-center gap-1 text-slate-600 dark:text-slate-400">
                 <Layers size={13} className="text-slate-500" />
                 {doc.flashcardsCount} Cards
               </span>
@@ -130,10 +127,10 @@ export default function GlassDocumentCard({ doc, onOpen, onStudy, onQuiz, onDele
                     e.stopPropagation();
                     onViewMastery?.(doc);
                   }}
-                  className="hidden lg:inline-flex items-center gap-1 text-slate-400 hover:text-amber-300 transition-colors cursor-pointer"
+                  className="hidden lg:inline-flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-amber-700 dark:hover:text-amber-300 transition-colors cursor-pointer"
                   title="View Knowledge Map for this document"
                 >
-                  <Network size={12} className="text-amber-400" />
+                  <Network size={12} className="text-amber-600 dark:text-amber-400" />
                   <span>Mastery</span>
                 </button>
                 <button
@@ -142,10 +139,10 @@ export default function GlassDocumentCard({ doc, onOpen, onStudy, onQuiz, onDele
                     e.stopPropagation();
                     onReviewMistakes?.(doc);
                   }}
-                  className="hidden lg:inline-flex items-center gap-1 text-slate-400 hover:text-rose-300 transition-colors cursor-pointer"
+                  className="hidden lg:inline-flex items-center gap-1 text-slate-600 dark:text-slate-400 hover:text-rose-700 dark:hover:text-rose-300 transition-colors cursor-pointer"
                   title="View Mistake Book for this document"
                 >
-                  <AlertTriangle size={12} className="text-rose-400" />
+                  <AlertTriangle size={12} className="text-rose-600 dark:text-rose-400" />
                   <span>Mistakes</span>
                 </button>
               </>
