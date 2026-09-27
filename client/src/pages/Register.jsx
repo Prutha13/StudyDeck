@@ -19,12 +19,8 @@ export default function Register() {
     setLoading(true);
     try {
       const res = await api.register(email, password);
-      if (res.token && res.user) {
-        login(res.token, res.user);
-        navigate('/dashboard');
-      } else {
-        navigate(`/verify-otp?email=${encodeURIComponent(email)}`);
-      }
+      login(res.token, res.user);
+      navigate('/dashboard');
     } catch (err) {
       setError(err.message);
     } finally {

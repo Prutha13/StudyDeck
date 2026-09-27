@@ -18,30 +18,15 @@ Use this step-by-step checklist to manually verify all critical user flows on a 
 - **Action**: In browser or curl, navigate to `GET https://your-api-domain.com/api/health`
 - **Expected Result**: HTTP `200 OK` with JSON `{ "ok": true }`.
 
-#### 2. User Registration & Email OTP Dispatch
+#### 2. User Registration
 - **Action**: Navigate to `https://your-client-domain.com/register`. Enter a new email (`testuser@example.com`) and password (8+ characters), then click **Create Account**.
 - **Expected Result**:
-  - User is not logged in immediately.
-  - UI seamlessly transitions to the **Verify Email** screen (`/verify-otp`).
-  - If SMTP is configured: A 6-digit OTP email arrives in your inbox with subject `"Your StudyDeck Verification Code: XXXXXX"`.
-  - If SMTP is omitted (local/dev): The 6-digit OTP is logged to the server stdout.
-
-#### 3. Email Verification (OTP)
-- **Action**: Enter the 6-digit verification code into the input boxes and submit.
-- **Expected Result**:
-  - HTTP `200 OK` response.
+  - HTTP `201 Created` response.
   - Auth token is saved to localStorage.
-  - User is redirected to `/dashboard`.
-  - User profile in database reflects `isVerified: true`.
+  - User is logged in immediately and redirected to `/dashboard`.
 
-#### 4. Unverified Login Guard (Negative Test)
-- **Action**: If an account is created with `isVerified: false` (e.g. before entering OTP), try logging in at `/login`.
-- **Expected Result**:
-  - Login is blocked with HTTP `403 Forbidden`: *"Please verify your email before logging in."*
-  - User is automatically prompted or redirected to enter their verification code.
-
-#### 5. Authenticated Login
-- **Action**: Log out and log back in at `/login` with the verified credentials.
+#### 3. Authenticated Login
+- **Action**: Log out and log back in at `/login` with the credentials.
 - **Expected Result**: Successful redirect to `/dashboard` with email displayed in the sidebar.
 
 #### 6. Document Upload & Text Extraction

@@ -3,14 +3,9 @@ import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
 import Document from '../models/Document.js';
 import QuizAttempt from '../models/QuizAttempt.js';
-import { sendOtpEmail } from '../services/email.service.js';
 
 function signToken(userId) {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, { expiresIn: '7d' });
-}
-
-function generateOtp() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
 function sanitizeUser(user) {
@@ -44,134 +39,26 @@ export async function register(req, res) {
     }
 
     const normalizedEmail = email.trim().toLowerCase();
-    let user = await User.findOne({ email: normalizedEmail });
+    const existingUser = await User.findOne({ email: normalizedEmail });
 
-    if (user && user.isVerified) {
+    if (existingUser) {
       return res.status(409).json({ error: 'Email already registered' });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-    const otp = generateOtp();
-    console.log(`[Auth] Generated OTP for ${normalizedEmail}: ${otp}`);
-    const otpHash = await bcrypt.hash(otp, 10);
-    const otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    const otpLastSentAt = new Date();
-
-    if (user) {
-      // Re-registering an unverified or legacy account: refresh credentials & OTP
-      user.passwordHash = passwordHash;
-      user.isVerified = false;
-      user.otpHash = otpHash;
-      user.otpExpiresAt = otpExpiresAt;
-      user.otpLastSentAt = otpLastSentAt;
-      await user.save();
-    } else {
-      // Fresh user registration
-      user = await User.create({
-        email: normalizedEmail,
-        passwordHash,
-        isVerified: false,
-        otpHash,
-        otpExpiresAt,
-        otpLastSentAt
-      });
-    }
-
-    try {
-      const result = await sendOtpEmail({ to: normalizedEmail, otp });
-      console.log(`[Auth] sendOtpEmail result for ${normalizedEmail}:`, result);
-    } catch (emailErr) {
-      console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
-    }
+    const user = await User.create({
+      email: normalizedEmail,
+      passwordHash,
+      isVerified: true
+    });
 
     res.status(201).json({
-      message: 'Registration successful. Verification code sent to your email.',
-      requiresVerification: true,
-      email: normalizedEmail
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message || 'Registration failed' });
-  }
-}
-
-export async function sendOtp(req, res) {
-  try {
-    const { email } = req.body;
-    if (!email) return res.status(400).json({ error: 'Email is required' });
-
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: normalizedEmail });
-    if (!user) return res.status(404).json({ error: 'User not found' });
-    if (user.isVerified) return res.status(400).json({ error: 'User is already verified' });
-
-    // Enforce 60s resend cooldown with null-guard
-    const COOLDOWN_MS = 60 * 1000;
-    if (user.otpLastSentAt) {
-      const elapsed = Date.now() - new Date(user.otpLastSentAt).getTime();
-      if (elapsed < COOLDOWN_MS) {
-        const retryAfter = Math.ceil((COOLDOWN_MS - elapsed) / 1000);
-        return res.status(429).json({
-          error: 'Please wait before requesting another verification code',
-          retryAfter
-        });
-      }
-    }
-
-    const otp = generateOtp();
-    console.log(`[Auth] Generated OTP for ${normalizedEmail}: ${otp}`);
-    user.otpHash = await bcrypt.hash(otp, 10);
-    user.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
-    user.otpLastSentAt = new Date();
-    await user.save();
-
-    try {
-      const result = await sendOtpEmail({ to: normalizedEmail, otp });
-      console.log(`[Auth] sendOtpEmail result for ${normalizedEmail}:`, result);
-    } catch (emailErr) {
-      console.error(`[Auth] Failed to send OTP email to ${normalizedEmail}:`, emailErr.message || emailErr);
-    }
-
-    res.json({
-      message: 'Verification code sent to your email',
-      email: normalizedEmail
-    });
-  } catch (err) {
-    res.status(500).json({ error: err.message || 'Failed to send verification code' });
-  }
-}
-
-export async function verifyOtp(req, res) {
-  try {
-    const { email, otp } = req.body;
-    if (!email || !otp) return res.status(400).json({ error: 'Email and verification code are required' });
-
-    const normalizedEmail = email.trim().toLowerCase();
-    const user = await User.findOne({ email: normalizedEmail });
-    if (!user) return res.status(404).json({ error: 'User not found' });
-
-    // Null-guard on otpHash and otpExpiresAt to prevent instant expiration errors
-    if (!user.otpHash || !user.otpExpiresAt || new Date() > new Date(user.otpExpiresAt)) {
-      return res.status(400).json({ error: 'No pending verification. Please request a new code.' });
-    }
-
-    const isMatch = await bcrypt.compare(otp, user.otpHash);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Invalid verification code' });
-    }
-
-    user.isVerified = true;
-    user.otpHash = null;
-    user.otpExpiresAt = null;
-    user.otpLastSentAt = null;
-    await user.save();
-
-    res.json({
-      message: 'Email verified successfully',
+      message: 'Registration successful',
       token: signToken(user._id),
       user: sanitizeUser(user)
     });
   } catch (err) {
-    res.status(500).json({ error: err.message || 'Failed to verify code' });
+    res.status(500).json({ error: err.message || 'Registration failed' });
   }
 }
 
@@ -189,14 +76,6 @@ export async function login(req, res) {
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({ error: 'Incorrect password. Please try again.' });
-    }
-
-    if (!user.isVerified) {
-      return res.status(403).json({
-        error: 'Please verify your email address before logging in.',
-        requiresVerification: true,
-        email: user.email
-      });
     }
 
     res.json({

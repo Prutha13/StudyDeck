@@ -1,14 +1,5 @@
 import nodemailer from 'nodemailer';
 
-let latestTestOtp = null;
-
-/**
- * Helper for test suites to inspect the latest generated OTP.
- */
-export function _getLatestTestOtp() {
-  return latestTestOtp;
-}
-
 /**
  * Internal helper: send an email via Nodemailer using Gmail SMTP.
  */
@@ -82,40 +73,6 @@ export async function sendWelcomeEmail({ to }) {
     return { success: true, data };
   } catch (err) {
     console.warn(`[EmailService] Failed to send welcome email to ${normalizedEmail}:`, err.message || err);
-    return { success: false, error: err.message || String(err) };
-  }
-}
-
-/**
- * Send OTP verification code email via Nodemailer.
- */
-export async function sendOtpEmail({ to, otp }) {
-  if (!to || !otp) return;
-  const normalizedEmail = to.trim().toLowerCase();
-  latestTestOtp = otp;
-
-  try {
-    const data = await sendMail({
-      to: normalizedEmail,
-      subject: `${otp} is your StudyDeck verification code`,
-      text: `Your verification code is ${otp}. It expires in 10 minutes.`,
-      html: `
-        <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 32px 24px; background-color: #0d1117; color: #e6edf3; border-radius: 16px; border: 1px solid #30363d;">
-          <div style="text-align: center; margin-bottom: 28px;">
-            <h1 style="font-size: 22px; font-weight: 700; color: #ffffff;">Verify Your Email</h1>
-            <p style="font-size: 14px; color: #8b949e;">Use the code below to complete your StudyDeck registration:</p>
-            <div style="font-size: 32px; font-weight: 800; letter-spacing: 6px; color: #58a6ff; margin: 24px 0; background: #161b22; padding: 16px; border-radius: 8px; border: 1px solid #30363d;">
-              ${otp}
-            </div>
-            <p style="font-size: 12px; color: #8b949e;">This code will expire in 10 minutes. If you did not request this, please ignore this email.</p>
-          </div>
-        </div>
-      `
-    });
-
-    return { success: true, data };
-  } catch (err) {
-    console.error(`[EmailService] Failed to send OTP email to ${normalizedEmail}:`, err.message || err);
     return { success: false, error: err.message || String(err) };
   }
 }

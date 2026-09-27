@@ -59,24 +59,9 @@ npm run dev              # starts on http://localhost:5173
 
 ---
 
-## 📧 Email Setup (Transactional OTPs)
+## 🔐 Authentication Setup
 
-StudyDeck uses email-based One-Time Passwords (OTPs) for registration verification.
-
-### Environment Variables
-Configure the following in `server/.env` (refer to `server/.env.example`):
-- `SMTP_HOST`: SMTP server host (e.g. `smtp.mailtrap.io` or `smtp.sendgrid.net`)
-- `SMTP_PORT`: SMTP port (`587` for TLS or `465` for SSL)
-- `SMTP_USER`: SMTP username or API key identifier
-- `SMTP_PASS`: SMTP password or API key secret
-- `SMTP_FROM`: Sender string, e.g. `"StudyDeck" <noreply@yourdomain.com>`
-
-> [!IMPORTANT]
-> **Local Dev Fallback**: When SMTP credentials are omitted, StudyDeck **silently falls back to console-logging OTPs** to the server terminal. This allows effortless local development without email credentials, but **must not be relied upon in production**. Real credentials must be configured on deployment.
-
-### Recommended Providers
-- **Development / Testing**: [Mailtrap Email Sandbox](https://mailtrap.io/) (free, captures all test emails without sending to real inboxes) or Gmail with an App Password.
-- **Production**: [SendGrid](https://sendgrid.com), [Postmark](https://postmarkapp.com), or [Amazon SES](https://aws.amazon.com/ses/) for high deliverability.
+StudyDeck uses email and password authentication for user registration and sign in.
 
 ---
 

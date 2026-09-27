@@ -17,20 +17,36 @@ const configuredOrigins = rawOrigins
   .map((o) => o.trim().replace(/\/+$/, ''))
   .filter(Boolean);
 
+const isLocalhost = (origin) => /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/i.test(origin);
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow non-browser requests (e.g. curl, server-to-server, mobile)
+    // Allow non-browser requests (e.g. curl, server-to-server, Postman)
     if (!origin) return callback(null, true);
-    // In development or if CLIENT_ORIGIN is unset, reflect origin
-    if (configuredOrigins.length === 0 || process.env.NODE_ENV !== 'production') {
+
+    const normalizedOrigin = origin.replace(/\/+$/, '');
+
+    // Always allow local dev origins (e.g. http://localhost:5173, http://localhost:5174)
+    if (isLocalhost(normalizedOrigin)) {
       return callback(null, true);
     }
-    // In production with CLIENT_ORIGIN configured, verify against allowlist
-    const normalizedOrigin = origin.replace(/\/+$/, '');
+
+    // In development, or if CLIENT_ORIGIN is unset / '*', allow all origins
+    if (
+      process.env.NODE_ENV !== 'production' ||
+      configuredOrigins.length === 0 ||
+      configuredOrigins.includes('*')
+    ) {
+      return callback(null, true);
+    }
+
+    // Check configured production allowlist
     if (configuredOrigins.includes(normalizedOrigin)) {
       return callback(null, true);
     }
-    return callback(new Error(`CORS blocked request from origin: ${origin}`));
+
+    // Reject CORS requests from unallowed origins without throwing 500 server stack traces
+    return callback(null, false);
   },
   credentials: true
 }));

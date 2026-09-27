@@ -24,12 +24,7 @@ const userSchema = new mongoose.Schema({
     aiCoachRequestsThisMonth: { type: Number, default: 0 },
     lastUsageReset: { type: Date, default: Date.now }
   },
-  isVerified: { type: Boolean, default: false },
-
-  // OTP Verification Fields
-  otpHash: { type: String, default: null },
-  otpExpiresAt: { type: Date, default: null },
-  otpLastSentAt: { type: Date, default: null },
+  isVerified: { type: Boolean, default: true },
 
   // Extended Profile Fields
   fullName: { type: String, default: '', trim: true },
