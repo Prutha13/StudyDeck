@@ -13,6 +13,7 @@ import {
   Crown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import * as api from '../api/client';
 
 const EDUCATION_LEVELS = [
@@ -24,6 +25,7 @@ const EDUCATION_LEVELS = [
 ];
 
 export default function Profile() {
+  usePageTitle('Your Profile');
   const { user, token, refreshUser } = useAuth();
 
   const [fullName, setFullName] = useState(user?.fullName || '');

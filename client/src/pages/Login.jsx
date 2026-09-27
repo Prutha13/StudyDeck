@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import * as api from '../api/client';
 
 export default function Login() {
+  usePageTitle('Sign In');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');

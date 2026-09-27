@@ -2,11 +2,31 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    
+    <!-- Favicon & Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>StudyDeck</title>
+
+    <!-- Meta Description & SEO -->
+    <title>StudyDeck — AI Study Workspace & Flashcard Generator</title>
+    <meta name="description" content="StudyDeck transforms your lecture notes, PDFs, and slide decks into executive summaries, practice quizzes, active-recall flashcards, and AI study guidance instantly." />
+    <meta name="keywords" content="StudyDeck, AI study notes, flashcard generator, quiz generator, lecture summary, note organizer, active recall" />
+    <meta name="author" content="StudyDeck Team" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="StudyDeck — AI Study Workspace" />
+    <meta property="og:description" content="Transform lecture notes into instant summaries, practice quizzes, active recall flashcards, and AI study decks." />
+    <meta property="og:image" content="/favicon.svg" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="StudyDeck — AI Study Workspace" />
+    <meta name="twitter:description" content="Transform lecture notes into instant summaries, practice quizzes, active recall flashcards, and AI study decks." />
+
+    <!-- Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -14,8 +34,8 @@
       rel="stylesheet"
     />
   </head>
-  <body className="bg-[#080b11] text-slate-100 antialiased selection:bg-amber-500/30 selection:text-amber-200">
-    <div id="root"></div>
+  <body class="bg-[#080b11] text-slate-100 antialiased max-w-full overflow-x-hidden w-full selection:bg-amber-500/30 selection:text-amber-200">
+    <div id="root" class="max-w-full overflow-x-hidden w-full"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

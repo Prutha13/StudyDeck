@@ -14,9 +14,11 @@ import {
   Crown
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import * as api from '../api/client';
 
 export default function Pricing() {
+  usePageTitle('Plans & Pricing');
   const { token, user } = useAuth();
   const navigate = useNavigate();
 

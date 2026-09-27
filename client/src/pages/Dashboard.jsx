@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, UploadCloud, Search, Plus, BookOpen, Flame } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import GlassDocumentCard from '../components/GlassDocumentCard';
 import * as api from '../api/client';
 
@@ -27,6 +28,7 @@ const itemVariants = {
 };
 
 export default function Dashboard() {
+  usePageTitle('Your Documents');
   const { token, user } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();

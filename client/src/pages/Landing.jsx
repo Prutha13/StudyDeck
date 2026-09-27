@@ -13,7 +13,8 @@ import {
   CheckCircle2,
   Menu,
   X,
-  Mail
+  Mail,
+  Phone
 } from 'lucide-react';
 import AmbientBackground from '../components/AmbientBackground';
 import StatusDot from '../components/StatusDot';
@@ -545,12 +546,18 @@ export default function Landing() {
           <motion.p variants={fadeUp} className="text-slate-400 text-sm max-w-md mx-auto mb-8">
             We’d love to hear how StudyDeck is helping your studies or answer any questions you have.
           </motion.p>
-          <motion.div variants={fadeUp} className="flex flex-wrap justify-center gap-4">
+          <motion.div variants={fadeUp} className="flex flex-wrap justify-center items-center gap-4">
             <a
               href="mailto:support@studydeck.app"
               className="btn-gold inline-flex items-center gap-2 text-sm font-semibold py-3 px-6 rounded-xl shadow-lg shadow-amber-500/20"
             >
-              <Mail size={16} /> Contact Support
+              <Mail size={16} /> support@studydeck.app
+            </a>
+            <a
+              href="tel:+18005550199"
+              className="btn-glass inline-flex items-center gap-2 text-sm font-semibold py-3 px-6 rounded-xl"
+            >
+              <Phone size={16} className="text-amber-400" /> +1 (800) 555-0199
             </a>
           </motion.div>
         </motion.div>

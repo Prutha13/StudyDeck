@@ -18,6 +18,7 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentCancel from './pages/PaymentCancel';
 import Billing from './pages/Billing';
 import Profile from './pages/Profile';
+import NotFound from './pages/NotFound';
 
 function PrivateRoute({ children }) {
   const { token } = useAuth();
@@ -63,7 +64,7 @@ export default function App() {
               <Route path="/documents/:id/quiz" element={<Quiz />} />
               <Route path="/documents/:id/flashcards" element={<Flashcards />} />
             </Route>
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
       </AuthProvider>

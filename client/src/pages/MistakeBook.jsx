@@ -18,6 +18,7 @@ import {
   Zap
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import DocumentFilter from '../components/DocumentFilter';
 import * as api from '../api/client';
 
@@ -31,6 +32,7 @@ const item = {
 };
 
 export default function MistakeBook() {
+  usePageTitle('Mistake Book');
   const { token } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

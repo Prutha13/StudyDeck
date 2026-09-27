@@ -14,10 +14,12 @@ import {
   Calendar
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import DocumentFilter from '../components/DocumentFilter';
 import * as api from '../api/client';
 
 export default function DailyReview() {
+  usePageTitle('Daily Review');
   const { token } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();

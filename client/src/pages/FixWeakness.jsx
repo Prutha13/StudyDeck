@@ -17,10 +17,12 @@ import {
   Award
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { usePageTitle } from '../hooks/usePageTitle';
 import FeatureGate from '../components/FeatureGate';
 import * as api from '../api/client';
 
 export default function FixWeakness() {
+  usePageTitle('Fix Weakness');
   const { token, user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
