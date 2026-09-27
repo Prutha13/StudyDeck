@@ -33,6 +33,7 @@ export default function App() {
             <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/verify-otp" element={<Navigate to="/login" replace />} />
             <Route path="/pricing" element={<Pricing />} />
             <Route
               path="/payment/success"
