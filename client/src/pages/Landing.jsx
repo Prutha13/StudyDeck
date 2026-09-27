@@ -147,7 +147,7 @@ export default function Landing() {
   };
 
   return (
-    <div className="relative min-h-screen bg-ink text-slate-100 overflow-x-hidden font-[var(--font-display)] selection:bg-amber-500/30 selection:text-amber-200">
+    <div className="dark relative min-h-screen bg-[#080b11] text-slate-100 overflow-x-hidden font-[var(--font-display)] selection:bg-amber-500/30 selection:text-amber-200">
       <AmbientBackground />
 
       {/* 1. NAVBAR */}
@@ -343,7 +343,7 @@ export default function Landing() {
           transition={{ duration: 0.7, ease: EASE, delay: 0.2 }}
           className="relative"
         >
-          <div className="rounded-2xl p-6 bg-paper border border-glass-border shadow-2xl backdrop-blur-xl">
+          <div className="rounded-2xl p-6 bg-[#0e121b] border border-white/10 shadow-2xl backdrop-blur-xl">
             {/* Header Mock */}
             <div className="flex items-center justify-between mb-5 border-b border-white/10 pb-4">
               <div className="flex items-center gap-3">
@@ -450,7 +450,7 @@ export default function Landing() {
               key={item.title}
               variants={fadeUp}
               whileHover={{ y: -4 }}
-              className="p-7 rounded-2xl bg-paper border border-glass-border hover:border-amber-500/40 transition-all shadow-xl"
+              className="p-7 rounded-2xl bg-[#0e121b] border border-white/10 hover:border-amber-500/40 transition-all shadow-xl"
             >
               <div className="w-10 h-10 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center mb-5 text-amber-400">
                 <item.icon size={20} />
@@ -493,7 +493,7 @@ export default function Landing() {
             <motion.div
               key={s.step}
               variants={fadeUp}
-              className="relative p-6 rounded-2xl bg-paper border border-glass-border flex flex-col justify-between"
+              className="relative p-6 rounded-2xl bg-[#0e121b] border border-white/10 flex flex-col justify-between"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -538,7 +538,7 @@ export default function Landing() {
           whileInView="show"
           viewport={{ once: true, margin: '-80px' }}
           variants={stagger}
-          className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-paper to-ink border border-amber-500/30 text-center shadow-2xl"
+          className="rounded-3xl p-8 sm:p-12 bg-gradient-to-br from-[#0e121b] to-[#080b11] border border-amber-500/30 text-center shadow-2xl"
         >
           <motion.h3 variants={fadeUp} className="font-serif text-2xl sm:text-3xl font-bold text-white mb-3">
             Have Questions or Feedback?

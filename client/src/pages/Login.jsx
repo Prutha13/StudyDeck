@@ -31,7 +31,7 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-screen bg-ink flex items-center justify-center px-6 overflow-hidden font-[var(--font-display)] selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200">
+    <div className="dark relative min-h-screen bg-[#080b11] flex items-center justify-center px-6 overflow-hidden font-[var(--font-display)] selection:bg-amber-500/30 selection:text-amber-200 transition-colors duration-200">
       {/* Ambient Background Glow Orbs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute -top-32 -left-20 w-[550px] h-[550px] rounded-full bg-[#f59e0b]/20 blur-[130px] animate-orb-amber" />
