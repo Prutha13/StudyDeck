@@ -133,18 +133,18 @@ export default function DailyReview() {
       <DocumentFilter selected={selectedDocument} onChange={setSelectedDocument} />
 
       {items.length === 0 ? (
-        <div className="glass-panel rounded-2xl p-12 text-center border border-white/10 shadow-2xl space-y-4">
-          <div className="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/10">
+        <div className="rounded-2xl p-12 text-center bg-surface border border-slate-200 dark:border-[#23262e] shadow-sm space-y-4">
+          <div className="w-14 h-14 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-600 dark:text-teal-400 flex items-center justify-center mx-auto shadow-sm">
             <CheckCircle2 size={32} />
           </div>
-          <h2 className="text-xl font-bold text-white">All Caught Up For Today! 🎉</h2>
-          <p className="text-xs sm:text-sm text-slate-400 max-w-md mx-auto leading-relaxed">
+          <h2 className="text-xl font-extrabold text-slate-900 dark:text-white">All Caught Up For Today! 🎉</h2>
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 max-w-md mx-auto leading-relaxed">
             No concepts are currently due for spaced review. Your retention curves are on track.
           </p>
           <div className="pt-3">
             <button
               onClick={() => navigate('/knowledge-map')}
-              className="btn-gold text-xs font-semibold py-2.5 px-5 rounded-xl cursor-pointer shadow-lg shadow-amber-500/20"
+              className="btn-gold text-xs font-semibold py-2.5 px-5 rounded-xl cursor-pointer"
             >
               Explore Knowledge Map
             </button>
@@ -154,25 +154,25 @@ export default function DailyReview() {
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="glass-panel rounded-2xl p-10 text-center border border-emerald-500/30 shadow-2xl space-y-6"
+          className="rounded-2xl p-10 text-center bg-surface border border-teal-500/30 shadow-lg space-y-6"
         >
-          <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20">
+          <div className="w-16 h-16 rounded-2xl bg-teal-500/10 border border-teal-500/30 text-teal-600 dark:text-teal-400 flex items-center justify-center mx-auto shadow-sm">
             <Award size={36} />
           </div>
 
           <div>
-            <h2 className="text-2xl font-extrabold text-white mb-2">
+            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-2">
               Daily Review Complete! 🧠
             </h2>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto">
-              You reviewed all <span className="font-bold text-amber-300">{items.length} concepts</span> scheduled for today and maintained your learning retention.
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-md mx-auto">
+              You reviewed all <span className="font-bold text-amber-700 dark:text-amber-300">{items.length} concepts</span> scheduled for today and maintained your learning retention.
             </p>
           </div>
 
           <div className="flex justify-center gap-4 pt-2">
             <button
               onClick={() => navigate('/knowledge-map')}
-              className="btn-gold text-xs font-semibold py-3 px-6 rounded-xl cursor-pointer shadow-lg shadow-amber-500/20"
+              className="btn-gold text-xs font-semibold py-3 px-6 rounded-xl cursor-pointer"
             >
               View Knowledge Map
             </button>

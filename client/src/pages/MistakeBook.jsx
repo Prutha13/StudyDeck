@@ -109,14 +109,14 @@ export default function MistakeBook() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
           <div className="flex items-center gap-2.5 mb-1.5">
-            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400">
+            <div className="w-8 h-8 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
               <BookOpen size={18} />
             </div>
-            <h1 className="font-bold text-2xl sm:text-3xl text-white tracking-tight">
+            <h1 className="font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white tracking-tight">
               AI Mistake Book
             </h1>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400">
+          <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
             Diagnosed conceptual misconceptions, targeted mini-fixes, and guided re-tests.
           </p>
         </div>
@@ -128,19 +128,19 @@ export default function MistakeBook() {
       {/* Stats Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3.5 mb-8">
         {[
-          { id: 'all', label: 'Total Recorded', count: counts.total, color: 'text-white', border: 'border-white/10' },
-          { id: 'needs_revision', label: 'Needs Revision', count: counts.needs_revision, color: 'text-rose-400', border: 'border-rose-500/30' },
-          { id: 'improving', label: 'Improving', count: counts.improving, color: 'text-amber-400', border: 'border-amber-500/30' },
-          { id: 'fixed', label: 'Fixed / Mastered', count: counts.fixed, color: 'text-emerald-400', border: 'border-emerald-500/30' }
+          { id: 'all', label: 'Total Recorded', count: counts.total, color: 'text-slate-900 dark:text-white', border: 'border-l-slate-400 dark:border-l-slate-500' },
+          { id: 'needs_revision', label: 'Needs Revision', count: counts.needs_revision, color: 'text-rose-600 dark:text-rose-400', border: 'border-l-rose-500' },
+          { id: 'improving', label: 'Improving', count: counts.improving, color: 'text-amber-600 dark:text-amber-400', border: 'border-l-amber-500' },
+          { id: 'fixed', label: 'Fixed / Mastered', count: counts.fixed, color: 'text-emerald-600 dark:text-emerald-400', border: 'border-l-emerald-500' }
         ].map((s) => (
           <div
             key={s.id}
             onClick={() => setSelectedStatus(s.id)}
-            className={`glass-panel rounded-2xl p-4 cursor-pointer transition-all ${
-              selectedStatus === s.id ? `${s.border} bg-white/5` : 'border-white/5 hover:border-white/20'
+            className={`bg-surface border-l-4 ${s.border} border-t border-r border-b border-slate-200 dark:border-white/10 rounded-2xl p-4 cursor-pointer transition-all ${
+              selectedStatus === s.id ? 'ring-2 ring-amber-500/50 shadow-md' : 'hover:border-slate-300 dark:hover:border-white/20'
             }`}
           >
-            <span className="text-[11px] font-medium text-slate-400 block mb-1">{s.label}</span>
+            <span className="text-[11px] font-medium text-slate-600 dark:text-slate-400 block mb-1">{s.label}</span>
             <span className={`text-2xl font-extrabold ${s.color}`}>{s.count}</span>
           </div>
         ))}
@@ -154,7 +154,7 @@ export default function MistakeBook() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search by mistake, misconception, or concept..."
-          className="glass-input w-full pl-11 pr-4 py-3 rounded-xl text-xs sm:text-sm focus:outline-none"
+          className="glass-input w-full pl-11 pr-4 py-3 rounded-xl text-xs sm:text-sm focus:outline-none placeholder-slate-400 dark:placeholder-slate-500"
         />
       </div>
 
@@ -162,18 +162,18 @@ export default function MistakeBook() {
       {loading ? (
         <div className="space-y-4">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-40 glass-panel rounded-2xl animate-pulse bg-white/5" />
+            <div key={i} className="h-40 glass-panel rounded-2xl animate-pulse bg-slate-200/50 dark:bg-white/5" />
           ))}
         </div>
       ) : filteredMistakes.length === 0 ? (
-        <div className="glass-panel rounded-2xl p-14 text-center border border-white/10">
-          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 flex items-center justify-center mx-auto mb-4">
+        <div className="glass-panel rounded-2xl p-14 text-center border border-slate-200 dark:border-white/10">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-600 dark:text-emerald-400 flex items-center justify-center mx-auto mb-4">
             <CheckCircle2 size={24} />
           </div>
-          <h3 className="text-base font-bold text-white mb-1">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1">
             {selectedStatus === 'all' ? 'No mistakes recorded yet!' : 'No mistakes in this category'}
           </h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto mb-6">
+          <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto mb-6">
             Whenever you take a quiz or practice session and get an answer wrong, StudyDeck AI will automatically diagnose the root misconception and store it here.
           </p>
           <button
@@ -193,16 +193,16 @@ export default function MistakeBook() {
               <motion.div
                 key={mistake._id}
                 variants={item}
-                className="glass-panel rounded-2xl p-6 sm:p-7 border border-white/10 shadow-2xl space-y-5"
+                className="glass-panel rounded-2xl p-6 sm:p-7 border border-slate-200 dark:border-white/10 shadow-sm dark:shadow-2xl space-y-5"
               >
                 {/* Card Top Pill Bar */}
-                <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-white/5">
+                <div className="flex flex-wrap items-center justify-between gap-2.5 pb-3 border-b border-slate-200 dark:border-white/5">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/25">
+                    <span className="text-xs font-bold text-amber-800 dark:text-amber-400 px-2.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/25">
                       {mistake.conceptName}
                     </span>
                     {mistake.occurrences > 1 && (
-                      <span className="text-[10px] font-semibold text-rose-300 px-2 py-0.5 rounded-full bg-rose-500/15 border border-rose-500/30">
+                      <span className="text-[10px] font-semibold text-rose-800 dark:text-rose-300 px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-500/15 border border-rose-300 dark:border-rose-500/30">
                         Mistaken {mistake.occurrences}x
                       </span>
                     )}
@@ -212,10 +212,10 @@ export default function MistakeBook() {
                     <span
                       className={`text-[11px] font-bold px-3 py-1 rounded-full border ${
                         mistake.status === 'fixed'
-                          ? 'bg-emerald-500/15 border-emerald-500/30 text-emerald-300'
+                          ? 'bg-emerald-100 dark:bg-emerald-500/15 border-emerald-300 dark:border-emerald-500/30 text-emerald-800 dark:text-emerald-300'
                           : mistake.status === 'improving'
-                          ? 'bg-amber-500/15 border-amber-500/30 text-amber-300'
-                          : 'bg-rose-500/15 border-rose-500/30 text-rose-300'
+                          ? 'bg-amber-100 dark:bg-amber-500/15 border-amber-300 dark:border-amber-500/30 text-amber-800 dark:text-amber-300'
+                          : 'bg-rose-100 dark:bg-rose-500/15 border-rose-300 dark:border-rose-500/30 text-rose-800 dark:text-rose-300'
                       }`}
                     >
                       {mistake.status === 'fixed'
@@ -229,81 +229,81 @@ export default function MistakeBook() {
 
                 {/* Original Question */}
                 <div>
-                  <h3 className="text-sm sm:text-base font-semibold text-white leading-snug mb-3">
+                  <h3 className="text-sm sm:text-base font-semibold text-slate-900 dark:text-white leading-snug mb-3">
                     {mistake.question}
                   </h3>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                     {/* Student Answer */}
-                    <div className="rounded-xl p-3 bg-rose-500/10 border border-rose-500/25 flex items-start gap-2.5">
-                      <XCircle size={16} className="text-rose-400 mt-0.5 shrink-0" />
+                    <div className="rounded-xl p-3 bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/25 flex items-start gap-2.5">
+                      <XCircle size={16} className="text-rose-500 dark:text-rose-400 mt-0.5 shrink-0" />
                       <div className="text-xs">
-                        <span className="font-semibold text-rose-300 block mb-0.5">Your Answer</span>
-                        <span className="text-slate-200">{mistake.studentAnswer}</span>
+                        <span className="font-semibold text-rose-800 dark:text-rose-300 block mb-0.5">Your Answer</span>
+                        <span className="text-slate-800 dark:text-slate-200">{mistake.studentAnswer}</span>
                       </div>
                     </div>
 
                     {/* Correct Answer */}
-                    <div className="rounded-xl p-3 bg-emerald-500/10 border border-emerald-500/25 flex items-start gap-2.5">
-                      <CheckCircle2 size={16} className="text-emerald-400 mt-0.5 shrink-0" />
+                    <div className="rounded-xl p-3 bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/25 flex items-start gap-2.5">
+                      <CheckCircle2 size={16} className="text-emerald-600 dark:text-emerald-400 mt-0.5 shrink-0" />
                       <div className="text-xs">
-                        <span className="font-semibold text-emerald-300 block mb-0.5">Correct Answer</span>
-                        <span className="text-slate-200">{mistake.correctAnswer}</span>
+                        <span className="font-semibold text-emerald-800 dark:text-emerald-300 block mb-0.5">Correct Answer</span>
+                        <span className="text-slate-800 dark:text-slate-200">{mistake.correctAnswer}</span>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* AI Misconception Diagnosis Box */}
-                <div className="rounded-2xl p-5 bg-gradient-to-br from-amber-500/10 via-amber-500/5 to-transparent border border-amber-500/30 space-y-3">
-                  <div className="flex items-center gap-2 text-xs font-bold text-amber-300 uppercase tracking-wider">
+                <div className="rounded-2xl p-5 bg-amber-50/70 dark:bg-gradient-to-br dark:from-amber-500/10 dark:via-amber-500/5 dark:to-transparent border border-amber-200 dark:border-amber-500/30 space-y-3">
+                  <div className="flex items-center gap-2 text-xs font-bold text-amber-800 dark:text-amber-300 uppercase tracking-wider">
                     AI Misconception Diagnosis
                   </div>
 
                   <div>
-                    <div className="text-xs font-bold text-white mb-1">
-                      You confused: <span className="text-amber-300">{mistake.misconception}</span>
+                    <div className="text-xs font-bold text-slate-900 dark:text-white mb-1">
+                      You confused: <span className="text-amber-800 dark:text-amber-300">{mistake.misconception}</span>
                     </div>
                     {mistake.whyChosen && (
-                      <p className="text-xs text-slate-300 leading-relaxed">{mistake.whyChosen}</p>
+                      <p className="text-xs text-slate-700 dark:text-slate-300 leading-relaxed">{mistake.whyChosen}</p>
                     )}
                   </div>
 
                   {mistake.miniFix && (
-                    <div className="pt-2 border-t border-amber-500/20">
-                      <span className="text-[11px] font-bold text-amber-400 uppercase tracking-wide block mb-1">
+                    <div className="pt-2 border-t border-amber-200 dark:border-amber-500/20">
+                      <span className="text-[11px] font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wide block mb-1">
                         Targeted Mini-Fix:
                       </span>
-                      <p className="text-xs text-slate-200 leading-relaxed">{mistake.miniFix}</p>
+                      <p className="text-xs text-slate-800 dark:text-slate-200 leading-relaxed">{mistake.miniFix}</p>
                     </div>
                   )}
                 </div>
 
                 {/* Try Again / Re-test Section */}
                 {mistake.tryAgainQuestion && (
-                  <div className="pt-3 border-t border-white/5">
+                  <div className="pt-3 border-t border-slate-200 dark:border-white/5">
                     {!isRetesting && !currentRetest.result ? (
                       <button
                         onClick={() => setActiveRetestId(mistake._id)}
-                        className="btn-gold flex items-center gap-2 text-xs font-semibold py-2.5 px-4 rounded-xl cursor-pointer shadow-lg shadow-amber-500/20"
+                        className="btn-gold flex items-center gap-2 text-xs font-semibold py-2.5 px-4 rounded-xl cursor-pointer shadow-md shadow-amber-500/20"
                       >
                         <Zap size={14} /> Try Again Practice Question
                       </button>
                     ) : (
-                      <div className="space-y-4 bg-white/5 rounded-2xl p-5 border border-white/10">
+                      <div className="space-y-4 bg-slate-100/70 dark:bg-white/5 rounded-2xl p-5 border border-slate-200 dark:border-white/10">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs font-bold text-amber-400 flex items-center gap-1.5">
+                          <span className="text-xs font-bold text-amber-800 dark:text-amber-400 flex items-center gap-1.5">
                             <Target size={14} /> Practice Re-Test
                           </span>
                           <button
                             onClick={() => setActiveRetestId(null)}
-                            className="text-xs text-slate-400 hover:text-white"
+                            className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
                           >
                             Close
                           </button>
                         </div>
 
-                        <p className="text-xs sm:text-sm font-medium text-white">
+                        <p className="text-xs sm:text-sm font-medium text-slate-900 dark:text-white">
                           {mistake.tryAgainQuestion.question}
                         </p>
 
@@ -321,17 +321,17 @@ export default function MistakeBook() {
                                 className={`w-full text-left p-3 rounded-xl text-xs font-medium border transition-all flex items-center justify-between cursor-pointer ${
                                   isSubmitted
                                     ? isCorrectOpt
-                                      ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-200'
+                                      ? 'bg-emerald-100 dark:bg-emerald-500/20 border-emerald-400 dark:border-emerald-500/50 text-emerald-900 dark:text-emerald-200 font-semibold'
                                       : isSelected
-                                      ? 'bg-rose-500/20 border-rose-500/50 text-rose-200'
-                                      : 'bg-white/5 border-white/10 text-slate-400 opacity-50'
-                                    : 'bg-white/5 border-white/10 hover:bg-white/10 hover:border-amber-500/40 text-slate-200'
+                                      ? 'bg-rose-100 dark:bg-rose-500/20 border-rose-400 dark:border-rose-500/50 text-rose-900 dark:text-rose-200'
+                                      : 'bg-slate-100/50 dark:bg-white/5 border-slate-200 dark:border-white/10 text-slate-400 dark:text-slate-500 opacity-50'
+                                    : 'bg-surface border-slate-200 dark:border-white/10 hover:bg-slate-100 dark:hover:bg-white/10 hover:border-amber-400 text-slate-800 dark:text-slate-200'
                                 }`}
                               >
                                 <span>{opt}</span>
-                                {isSubmitted && isCorrectOpt && <Check size={16} className="text-emerald-400" />}
+                                {isSubmitted && isCorrectOpt && <Check size={16} className="text-emerald-600 dark:text-emerald-400" />}
                                 {isSubmitted && isSelected && !isCorrectOpt && (
-                                  <X size={16} className="text-rose-400" />
+                                  <X size={16} className="text-rose-600 dark:text-rose-400" />
                                 )}
                               </button>
                             );
@@ -342,8 +342,8 @@ export default function MistakeBook() {
                           <div
                             className={`p-3.5 rounded-xl text-xs ${
                               currentRetest.result.isCorrect
-                                ? 'bg-emerald-500/10 border border-emerald-500/30 text-emerald-300'
-                                : 'bg-rose-500/10 border border-rose-500/30 text-rose-300'
+                                ? 'bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/30 text-emerald-900 dark:text-emerald-300'
+                                : 'bg-rose-50 dark:bg-rose-500/10 border border-rose-200 dark:border-rose-500/30 text-rose-900 dark:text-rose-300'
                             }`}
                           >
                             <span className="font-bold block mb-1">

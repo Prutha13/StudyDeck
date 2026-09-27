@@ -137,20 +137,21 @@ export default function KnowledgeMap() {
       <DocumentFilter selected={selectedDocument} onChange={setSelectedDocument} />
 
       {/* Hero Stats Grid */}
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         {/* Overall Mastery Card */}
-        <div className="glass-panel rounded-2xl p-5 border border-amber-500/30 bg-gradient-to-br from-amber-500/10 to-transparent flex flex-col justify-between">
+        <div className="glass-panel rounded-2xl p-5 border border-slate-200 dark:border-[#23262e] border-l-4 border-l-amber-500 bg-surface flex flex-col justify-between shadow-sm">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-semibold uppercase tracking-wider text-amber-400">Overall Mastery</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-700 dark:text-amber-400">Overall Mastery</span>
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-white tracking-tight">{stats.overallScore}%</span>
-            <span className="text-xs text-slate-400">across {stats.totalConcepts} concepts</span>
+            <span className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">{stats.overallScore}%</span>
+            <span className="text-xs text-slate-600 dark:text-slate-400">across {stats.totalConcepts} concepts</span>
           </div>
           {/* Progress bar */}
-          <div className="w-full h-2 rounded-full bg-white/10 mt-4 overflow-hidden">
+          <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-white/10 mt-4 overflow-hidden">
             <div
-              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-300 transition-all duration-500"
+              className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-400 transition-all duration-500"
               style={{ width: `${Math.max(4, stats.overallScore)}%` }}
             />
           </div>
@@ -159,46 +160,46 @@ export default function KnowledgeMap() {
         {/* Mastered Card */}
         <div
           onClick={() => setSelectedFilter(selectedFilter === 'mastered' ? 'all' : 'mastered')}
-          className={`glass-card rounded-2xl p-5 cursor-pointer transition-all ${
-            selectedFilter === 'mastered' ? 'border-emerald-500/60 bg-emerald-500/10' : ''
+          className={`glass-card rounded-2xl p-5 cursor-pointer border border-slate-200 dark:border-[#23262e] border-l-4 border-l-teal-600 dark:border-l-teal-400 transition-all shadow-sm ${
+            selectedFilter === 'mastered' ? 'bg-teal-50 dark:bg-teal-500/10' : ''
           }`}
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Mastered</span>
-            <CheckCircle2 size={16} className="text-emerald-400" />
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-400">Mastered</span>
+            <CheckCircle2 size={16} className="text-teal-600 dark:text-teal-400" />
           </div>
-          <div className="text-2xl font-bold text-emerald-300">{stats.masteredCount}</div>
-          <div className="text-[11px] text-slate-500 mt-1">Score ≥ 80% with confidence</div>
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-teal-300">{stats.masteredCount}</div>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Score ≥ 80% with confidence</div>
         </div>
 
         {/* Improving Card */}
         <div
           onClick={() => setSelectedFilter(selectedFilter === 'improving' ? 'all' : 'improving')}
-          className={`glass-card rounded-2xl p-5 cursor-pointer transition-all ${
-            selectedFilter === 'improving' ? 'border-amber-500/60 bg-amber-500/10' : ''
+          className={`glass-card rounded-2xl p-5 cursor-pointer border border-slate-200 dark:border-[#23262e] border-l-4 border-l-amber-600 dark:border-l-amber-400 transition-all shadow-sm ${
+            selectedFilter === 'improving' ? 'bg-amber-50 dark:bg-amber-500/10' : ''
           }`}
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Improving</span>
-            <TrendingUp size={16} className="text-amber-400" />
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-400">Improving</span>
+            <TrendingUp size={16} className="text-amber-600 dark:text-amber-400" />
           </div>
-          <div className="text-2xl font-bold text-amber-300">{stats.improvingCount}</div>
-          <div className="text-[11px] text-slate-500 mt-1">Score 50% – 79%</div>
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-amber-300">{stats.improvingCount}</div>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Score 50% – 79%</div>
         </div>
 
         {/* Struggling / Weak Areas Card */}
         <div
           onClick={() => setSelectedFilter(selectedFilter === 'struggling' ? 'all' : 'struggling')}
-          className={`glass-card rounded-2xl p-5 cursor-pointer transition-all ${
-            selectedFilter === 'struggling' ? 'border-rose-500/60 bg-rose-500/10' : ''
+          className={`glass-card rounded-2xl p-5 cursor-pointer border border-slate-200 dark:border-[#23262e] border-l-4 border-l-rose-600 dark:border-l-rose-400 transition-all shadow-sm ${
+            selectedFilter === 'struggling' ? 'bg-rose-50 dark:bg-rose-500/10' : ''
           }`}
         >
           <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-medium text-slate-400">Needs Revision</span>
-            <AlertTriangle size={16} className="text-rose-400" />
+            <span className="text-xs font-semibold text-slate-700 dark:text-slate-400">Needs Revision</span>
+            <AlertTriangle size={16} className="text-rose-600 dark:text-rose-400" />
           </div>
-          <div className="text-2xl font-bold text-rose-300">{stats.strugglingCount}</div>
-          <div className="text-[11px] text-slate-500 mt-1">Score &lt; 50% or recent mistakes</div>
+          <div className="text-3xl font-extrabold text-slate-900 dark:text-rose-300">{stats.strugglingCount}</div>
+          <div className="text-[11px] text-slate-600 dark:text-slate-400 mt-1">Score &lt; 50% or recent mistakes</div>
         </div>
       </div>
 
@@ -211,11 +212,11 @@ export default function KnowledgeMap() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search concepts, topics, or definitions…"
-            className="glass-input w-full pl-11 pr-4 py-2.5 rounded-xl text-xs sm:text-sm focus:outline-none"
+            className="w-full pl-11 pr-4 py-2.5 rounded-xl text-xs sm:text-sm bg-surface border border-slate-200 dark:border-[#23262e] text-slate-900 dark:text-slate-100 placeholder:text-slate-400 dark:placeholder:text-slate-500 focus:outline-none focus:border-amber-500/50"
           />
         </div>
 
-        <div className="flex items-center gap-1.5 p-1 bg-white/5 border border-white/10 rounded-xl overflow-x-auto">
+        <div className="flex items-center gap-1.5 p-1 bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/10 rounded-xl overflow-x-auto">
           {[
             { id: 'all', label: 'All' },
             { id: 'mastered', label: 'Mastered 🟢' },
@@ -245,14 +246,14 @@ export default function KnowledgeMap() {
           ))}
         </div>
       ) : filteredSubjects.length === 0 ? (
-        <div className="glass-panel rounded-2xl p-12 text-center border border-white/10">
-          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mx-auto mb-4">
+        <div className="rounded-2xl p-12 text-center bg-surface border border-slate-200 dark:border-[#23262e] shadow-sm">
+          <div className="w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-600 dark:text-amber-400 flex items-center justify-center mx-auto mb-4">
             <BookOpen size={22} />
           </div>
-          <h3 className="text-base font-semibold text-white mb-1">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white mb-1.5">
             {searchQuery || selectedFilter !== 'all' ? 'No matching concepts found' : 'No knowledge map generated yet'}
           </h3>
-          <p className="text-xs text-slate-400 max-w-md mx-auto mb-6">
+          <p className="text-xs text-slate-600 dark:text-slate-400 max-w-md mx-auto mb-6 leading-relaxed">
             {searchQuery || selectedFilter !== 'all'
               ? 'Try changing your search keywords or resetting filters.'
               : 'Upload study material or lecture notes to automatically extract topics, concepts, and track your personalized mastery.'}
@@ -281,13 +282,13 @@ export default function KnowledgeMap() {
           {filteredSubjects.map((subject) => (
             <motion.div key={subject._id} variants={item} className="space-y-4">
               {/* Subject Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-white/10">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-200 dark:border-white/10">
                 <div className="flex items-center gap-2.5">
-                  <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+                  <div className="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-600 dark:text-amber-400">
                     <BookOpen size={16} />
                   </div>
                   <div>
-                    <h2 className="text-base sm:text-lg font-bold text-white tracking-tight">
+                    <h2 className="text-base sm:text-lg font-bold text-slate-900 dark:text-white tracking-tight">
                       {subject.name}
                     </h2>
                     {subject.description && (
