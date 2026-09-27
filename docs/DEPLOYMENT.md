@@ -64,24 +64,23 @@ A `render.yaml` blueprint is already included in the repository.
 
 ---
 
-## 3. Frontend Deployment (Vercel)
+## 3. Frontend Deployment (Netlify / Vercel)
 
-The repository includes `client/vercel.json` with SPA route rewrites configured.
+The repository includes `netlify.toml` and `client/public/_redirects` configured for Netlify SPA route rewrites and API proxying.
 
-1. In Vercel Dashboard, click **Add New...** > **Project**.
-2. Import your Git repository.
-3. Configure the build settings:
+1. In Netlify Dashboard, click **Add new site** > **Import an existing project**.
+2. Import your Git repository (`Prutha13/StudyDeck`).
+3. Netlify will automatically detect `netlify.toml` with settings:
    - **Root Directory**: `client`
-   - **Framework Preset**: `Vite`
    - **Build Command**: `npm run build`
-   - **Output Directory**: `dist`
-4. Add the **Environment Variable**:
+   - **Publish Directory**: `client/dist`
+4. Optional Environment Variable:
 
 | Variable Name | Description | Example |
 |---|---|---|
-| `VITE_API_URL` | Full URL to your deployed backend API | `https://studydeck-server.onrender.com/api` |
+| `VITE_API_URL` | Full URL to backend API (Optional; defaults to Render) | `https://studydeck-exg9.onrender.com/api` |
 
-5. Deploy! Once deployed, copy your production frontend URL (e.g. `https://studydeck.vercel.app`) and update the backend's `CLIENT_ORIGIN` environment variable on Render.
+5. Once deployed, copy your production Netlify URL (e.g. `https://studydeck-your-personal-tutor.netlify.app`) and set `CLIENT_ORIGIN` in your backend Environment Variables on Render.
 
 ---
 
